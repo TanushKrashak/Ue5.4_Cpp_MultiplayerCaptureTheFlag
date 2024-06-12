@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
+#include "Interfaces/Cpp_InteractionInterface.h"
 #include "Cpp_Test_CTFCharacter.generated.h"
 
 // Forward Declarations
@@ -17,7 +18,7 @@ struct FInputActionValue;
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
 UCLASS(config=Game)
-class ACpp_Test_CTFCharacter : public ACharacter {
+class ACpp_Test_CTFCharacter : public ACharacter, public ICpp_InteractionInterface {
 	GENERATED_BODY()
 public:
 	ACpp_Test_CTFCharacter();
@@ -57,6 +58,9 @@ protected:
 	// Projectile Class
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Projectile", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<class ACpp_Projectile> ProjectileClass;
+
+	// Inherited via ICpp_InteractionInterface
+	virtual void OnProjectileHit(AActor* OtherActor) override;
 
 	//================================================================================================================
 	// FUNCTIONS

@@ -51,6 +51,11 @@ ACpp_Test_CTFCharacter::ACpp_Test_CTFCharacter() {
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
+}	
+
+void ACpp_Test_CTFCharacter::OnProjectileHit(AActor* OtherActor) {
+	// print 
+	UE_LOG(LogTemplateCharacter, Log, TEXT("HIT BY PROJECTILE"));
 }
 
 void ACpp_Test_CTFCharacter::BeginPlay() {
@@ -119,8 +124,7 @@ void ACpp_Test_CTFCharacter::Look(const FInputActionValue& Value) {
 
 void ACpp_Test_CTFCharacter::ShootProjectile() {
 	// Spawns a projectile class at the player's location (with offset) with the player's rotation
-	if (ProjectileClass) {
-		UE_LOG(LogTemplateCharacter, Log, TEXT("Shooting Projectile"));
+	if (ProjectileClass) {		
 		const FVector SpawnLocation = GetActorLocation() + FVector(0.0f, 0.0f, 50.0f) + (GetActorForwardVector() * 100);
 		const FRotator SpawnRotation = GetActorRotation();
 		FActorSpawnParameters SpawnParams = FActorSpawnParameters();

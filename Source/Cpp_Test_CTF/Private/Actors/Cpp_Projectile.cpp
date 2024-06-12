@@ -4,6 +4,7 @@
 #include "Actors/Cpp_Projectile.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/BoxComponent.h"
+#include "Interfaces/Cpp_InteractionInterface.h"
 
 
 ACpp_Projectile::ACpp_Projectile() {
@@ -58,8 +59,15 @@ void ACpp_Projectile::Tick(float DeltaTime) {
 void ACpp_Projectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& Hit) {
 	// only if has authority
 	if (HasAuthority()) {
-		// print Hit Actor name and destroy the projectile
-		UE_LOG(LogTemp, Warning, TEXT("Hit Actor: %s"), *OtherActor->GetName());
+		// If the OtherActor is not null
+		if (OtherActor) {
+			// Call the OnProjectileHit function from the OtherActor
+			ICpp_InteractionInterface* InteractionInterface = Cast<ICpp_InteractionInterface>(OtherActor);
+			if (InteractionInterface) {
+				// Call the OnProjectileHit function from the OtherActor
+				InteractionInterface->OnProjectileHit(GetOwner());
+			}
+		}
 		Destroy();
 		return;
 	}
