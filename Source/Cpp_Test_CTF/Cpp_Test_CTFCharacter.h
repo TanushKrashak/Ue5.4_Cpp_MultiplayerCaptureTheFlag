@@ -78,6 +78,7 @@ protected:
 	void Look(const FInputActionValue& Value);
 
 	// Shoot a projectile
+	UFUNCTION(Server, Reliable)
 	void ShootProjectile();
 
 	// Inherited via ICpp_InteractionInterface

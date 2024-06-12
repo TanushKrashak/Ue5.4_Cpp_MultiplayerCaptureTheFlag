@@ -76,6 +76,7 @@ void ACpp_Test_CTFCharacter::BeginPlay() {
 			ACpp_RespawnPoints* RespawnPoint = Cast<ACpp_RespawnPoints>(Actor);
 			if (RespawnPoint->GetIsTeamA() == bIsTeamA) {
 				RespawnPoints.Add(RespawnPoint);
+				UE_LOG(LogTemplateCharacter, Warning, TEXT("Respawn Point Added"));
 			}
 		}
 	}
@@ -141,9 +142,9 @@ void ACpp_Test_CTFCharacter::Look(const FInputActionValue& Value) {
 	}
 }
 
-void ACpp_Test_CTFCharacter::ShootProjectile() {
+void ACpp_Test_CTFCharacter::ShootProjectile_Implementation() {
 	// Spawns a projectile class at the player's location (with offset) with the player's rotation
-	if (ProjectileClass && !bIsDead) {		
+	if (ProjectileClass && !bIsDead && HasAuthority()) {		
 		const FVector SpawnLocation = GetActorLocation() + FVector(0.0f, 0.0f, 50.0f) + (GetActorForwardVector() * 100);
 		const FRotator SpawnRotation = GetActorRotation();
 		FActorSpawnParameters SpawnParams = FActorSpawnParameters();
