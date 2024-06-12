@@ -8,6 +8,7 @@
 
 // Forward Declarations
 class UStaticMeshComponent;
+class UProjectileMovementComponent;
 
 UCLASS()
 class CPP_TEST_CTF_API ACpp_Projectile : public AActor
@@ -24,6 +25,10 @@ protected:
 	// Add a UStaticMeshComponent* called ProjectileMesh
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Projectile", meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* ProjectileMesh;
+	
+	// Add a UProjectileMovementComponent* called ProjectileMovement
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Projectile", meta = (AllowPrivateAccess = "true"))
+	UProjectileMovementComponent* ProjectileMovement;
 
 
 

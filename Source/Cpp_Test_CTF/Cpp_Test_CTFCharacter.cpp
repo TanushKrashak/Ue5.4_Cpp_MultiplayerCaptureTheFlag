@@ -1,5 +1,9 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
+// Game Includes
+#include "Cpp_Test_CTFCharacter.h"
+#include "Actors/Cpp_Projectile.h"
+
 // Engine Includes
 #include "Engine/LocalPlayer.h"
 #include "Camera/CameraComponent.h"
@@ -11,9 +15,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 
-// Game Includes
-#include "Cpp_Test_CTFCharacter.h"
-#include "Actors/Cpp_Projectile.h"
+
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 

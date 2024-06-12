@@ -2,14 +2,27 @@
 
 
 #include "Actors/Cpp_Projectile.h"
+#include "GameFramework/ProjectileMovementComponent.h"
 
 ACpp_Projectile::ACpp_Projectile()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
-	// Create a UStaticMeshComponent* called ProjectileMesh
+	// Set actor to be Replicated
+	bReplicates = true;
+	SetReplicateMovement(true);
+
+	// Create the UStaticMeshComponent* for ProjectileMesh
 	ProjectileMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ProjectileMesh"));
+	RootComponent = ProjectileMesh;	
+
+	// Create a UProjectileMovementComponent for ProjectileMovement
+	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovement"));
+
+	// Set projectile initial speed and MaxSpeed
+	ProjectileMovement->InitialSpeed = 3000.f;
+	ProjectileMovement->MaxSpeed = 3000.f;
 
 }
 
