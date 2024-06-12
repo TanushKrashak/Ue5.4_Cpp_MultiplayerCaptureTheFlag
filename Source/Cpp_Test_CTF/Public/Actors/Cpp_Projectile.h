@@ -6,6 +6,9 @@
 #include "GameFramework/Actor.h"
 #include "Cpp_Projectile.generated.h"
 
+// Forward Declarations
+class UStaticMeshComponent;
+
 UCLASS()
 class CPP_TEST_CTF_API ACpp_Projectile : public AActor
 {
@@ -18,13 +21,16 @@ protected:
 	//================================================================================================================
 	// PROPERTIES & VARIABLES
 	//================================================================================================================
+	// Add a UStaticMeshComponent* called ProjectileMesh
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Projectile", meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* ProjectileMesh;
+
 
 
 
 	//================================================================================================================
 	// FUNCTIONS
-	//================================================================================================================
-	// Called when the game starts or when spawned
+	//================================================================================================================	
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 

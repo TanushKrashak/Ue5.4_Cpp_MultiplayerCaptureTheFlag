@@ -1,6 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "Cpp_Test_CTFCharacter.h"
+// Engine Includes
 #include "Engine/LocalPlayer.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -10,6 +10,10 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+
+// Game Includes
+#include "Cpp_Test_CTFCharacter.h"
+#include "Actors/Cpp_Projectile.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -73,7 +77,7 @@ void ACpp_Test_CTFCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ACpp_Test_CTFCharacter::Look);
 
 		// Shooting
-		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Triggered, this, &ACpp_Test_CTFCharacter::ShootProjectile);
+		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Started, this, &ACpp_Test_CTFCharacter::ShootProjectile);
 	}
 	else {
 		UE_LOG(LogTemplateCharacter, Error, TEXT("'%s' Failed to find an Enhanced Input component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
@@ -112,5 +116,12 @@ void ACpp_Test_CTFCharacter::Look(const FInputActionValue& Value) {
 }
 
 void ACpp_Test_CTFCharacter::ShootProjectile() {
+	// Spawns a projectile class at the player's location (with offset) with the player's rotation
+	if (ProjectileClass) {
+		const FVector SpawnLocation = GetActorLocation() + FVector(0.0f, 0.0f, 50.0f) + (GetActorForwardVector() * 100);
+		const FRotator SpawnRotation = GetActorRotation();
+		GetWorld()->SpawnActor<ACpp_Projectile>(ProjectileClass, SpawnLocation, SpawnRotation);
+	}
+	
 
 }

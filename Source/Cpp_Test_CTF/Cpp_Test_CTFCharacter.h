@@ -54,6 +54,10 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* ShootAction;
 
+	// Projectile Class
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Projectile", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<class ACpp_Projectile> ProjectileClass;
+
 	//================================================================================================================
 	// FUNCTIONS
 	//================================================================================================================
