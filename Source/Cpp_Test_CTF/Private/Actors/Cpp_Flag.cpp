@@ -12,6 +12,7 @@ ACpp_Flag::ACpp_Flag() {
 
 	// Set actor to be Replicated
 	bReplicates = true;	
+	SetReplicateMovement(true);
 
 	// Create the Flag Mesh
 	FlagMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Flag Mesh"));
@@ -40,23 +41,25 @@ void ACpp_Flag::BeginPlay() {
 
 
 
-void ACpp_Flag::OnFlagOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
-	UE_LOG(LogTemp, Warning, TEXT("Flag Overlap L"));
+void ACpp_Flag::OnFlagOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {	
 	if (HasAuthority()) {
 		Serv_OnFlagOverlap(OtherActor);
 	}
 }
 
-void ACpp_Flag::Serv_OnFlagOverlap_Implementation(AActor* OtherActor) {
-	UE_LOG(LogTemp, Warning, TEXT("Flag Overlap"));
+void ACpp_Flag::Serv_OnFlagOverlap_Implementation(AActor* OtherActor) {	
 	switch (FlagState) {
 		case EFlagState::FS_Idle:
 			// Check if other actor was a player			
-			if (const auto* Player = Cast<ACpp_Test_CTFCharacter>(OtherActor)) {
+			if (auto* Player = Cast<ACpp_Test_CTFCharacter>(OtherActor)) {
 				FlagState = EFlagState::FS_Carried;
-				// Attach the Flag to the Player
-				FlagMesh->AttachToComponent(Player->FlagAttachment, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+				// Disable Self Collision and attach to player
+				FlagMesh->SetSimulatePhysics(false);
+				FlagMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+				FlagCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+				this->AttachToComponent(Player->FlagAttachment, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 			}
+
 			break;
 		case EFlagState::FS_Carried:
 			break;
