@@ -24,4 +24,13 @@ public:
 	// Func for when you need Player's Team
 	UFUNCTION(Category = "Interaction")
 	virtual bool GetIsTeamA();
+
+	// Func for getting whether the player has the flag
+	UFUNCTION(Category = "Flag")
+	virtual bool GetHasFlag();
+
+	// Func for setting whether the player has the flag
+	UFUNCTION(Category = "Flag")
+	virtual void ScoreGoal();
+
 };

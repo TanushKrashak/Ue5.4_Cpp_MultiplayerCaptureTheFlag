@@ -56,8 +56,12 @@ void ACpp_Goal::OnGoalOverlap(UPrimitiveComponent* OverlappedComponent, AActor* 
 void ACpp_Goal::MC_OnGoalOverlap_Implementation(AActor* OtherActor) {	
 	// check if other actor implements the interaction interface
 	ICpp_InteractionInterface* Interactable = Cast<ICpp_InteractionInterface>(OtherActor);
-	if (Interactable->GetIsTeamA() != bIsTeamA) {
-		UE_LOG(LogTemp, Warning, TEXT("Goal Scored!"));
+	// if it does, check if it is on the opposite team
+	if (Interactable && Interactable->GetIsTeamA() != bIsTeamA) {
+		// if it is, check if it has the flag
+		if (Interactable->GetHasFlag()) {
+			Interactable->ScoreGoal();
+		}		
 	}
 	
 }

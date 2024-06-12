@@ -12,3 +12,11 @@ void ICpp_InteractionInterface::OnProjectileHit(AActor* OtherActor) {
 bool ICpp_InteractionInterface::GetIsTeamA() {
     return false;
 }
+
+bool ICpp_InteractionInterface::GetHasFlag() {
+	return false;
+}
+
+void ICpp_InteractionInterface::ScoreGoal() {
+
+}

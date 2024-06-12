@@ -17,7 +17,7 @@ class UInputAction;
 struct FInputActionValue;
 class ACpp_RespawnPoints;
 class UCpp_WGT_Respawning;
-
+class ACpp_Flag;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
@@ -70,6 +70,12 @@ protected:
 	bool bIsTeamA;
 	UPROPERTY(Replicated, BlueprintReadOnly, Category = "Character", meta = (AllowPrivateAccess = "true"))
 	TArray<ACpp_RespawnPoints*> RespawnPoints;
+	UPROPERTY(Replicated, BlueprintReadOnly, Category = "Character", meta = (AllowPrivateAccess = "true"))
+	bool bHasFlag;
+
+	// Flag Reference
+	UPROPERTY(Replicated, BlueprintReadOnly, Category = "Character", meta = (AllowPrivateAccess = "true"))
+	ACpp_Flag* Flag;
 
 	// Respawn Widget
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Widgets", meta = (AllowPrivateAccess = "true"))
@@ -93,6 +99,8 @@ protected:
 	// Inherited via ICpp_InteractionInterface
 	virtual bool GetIsTeamA() override;
 	virtual void OnProjectileHit(AActor * OtherActor) override;
+	virtual bool GetHasFlag() override;
+	virtual void ScoreGoal() override;
 
 	UFUNCTION(NetMulticast, Reliable)
 	void OnDeath();
@@ -120,5 +128,8 @@ public:
 
 	UFUNCTION(NetMulticast, Reliable)
 	void SpawnCharacter();
+
+	// Setters
+	void SetFlag(ACpp_Flag* flag);
 };
 

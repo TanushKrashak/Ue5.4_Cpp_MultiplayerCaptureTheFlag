@@ -52,22 +52,19 @@ void ACpp_Flag::MC_OnFlagOverlap_Implementation(AActor* OtherActor) {
 		case EFlagState::FS_Idle:
 			// Check if other actor was a player			
 			if (auto* Player = Cast<ACpp_Test_CTFCharacter>(OtherActor)) {
-				FlagState = EFlagState::FS_Carried;
+				FlagState = EFlagState::FS_Carried;				
+				Player->SetFlag(this);
 				// Disable Self Collision and attach to player
 				FlagMesh->SetSimulatePhysics(false);
 				FlagMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 				FlagCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 				this->AttachToComponent(Player->FlagAttachment, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 			}
-
 			break;
 		case EFlagState::FS_Carried:
 			break;
-		case EFlagState::FS_Placed:
-			break;
 		default:
 			break;
-
 	}
 }
 

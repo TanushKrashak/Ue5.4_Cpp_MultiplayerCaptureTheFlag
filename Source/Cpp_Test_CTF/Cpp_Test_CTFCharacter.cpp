@@ -5,6 +5,7 @@
 #include "Actors/Cpp_Projectile.h"
 #include "Actors/Cpp_RespawnPoints.h"
 #include "Widgets/Cpp_WGT_Respawning.h"
+#include "Actors/Cpp_Flag.h"
 
 // Engine Includes
 #include "Engine/LocalPlayer.h"
@@ -59,6 +60,7 @@ ACpp_Test_CTFCharacter::ACpp_Test_CTFCharacter() {
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
 	bIsDead = false;
+	bHasFlag = false;
 
 	// Set up Location For FlagAttachment
 	FlagAttachment = CreateDefaultSubobject<USceneComponent>(TEXT("FlagAttachment"));
@@ -169,6 +171,15 @@ bool ACpp_Test_CTFCharacter::GetIsTeamA() {
 void ACpp_Test_CTFCharacter::OnProjectileHit(AActor* OtherActor) {
 	OnDeath();
 }
+bool ACpp_Test_CTFCharacter::GetHasFlag() {
+	return bHasFlag;
+}
+void ACpp_Test_CTFCharacter::ScoreGoal() {
+	bHasFlag = false;	
+	// Destroy Flag
+	Flag->Destroy();
+
+}
 
 void ACpp_Test_CTFCharacter::OnDeath_Implementation() {
 	if (HasAuthority()) {
@@ -213,6 +224,7 @@ void ACpp_Test_CTFCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty
 	DOREPLIFETIME(ACpp_Test_CTFCharacter, bIsDead);
 	DOREPLIFETIME(ACpp_Test_CTFCharacter, bIsTeamA);
 	DOREPLIFETIME(ACpp_Test_CTFCharacter, RespawnPoints);	
+	DOREPLIFETIME(ACpp_Test_CTFCharacter, bHasFlag);
 }
 
 void ACpp_Test_CTFCharacter::SpawnCharacter_Implementation() {
@@ -224,4 +236,9 @@ void ACpp_Test_CTFCharacter::SpawnCharacter_Implementation() {
 			SetActorRotation(RespawnPoint->GetActorRotation());
 		}
 	}
+}
+
+void ACpp_Test_CTFCharacter::SetFlag(ACpp_Flag* flag) {
+	bHasFlag = true;
+	Flag = flag;
 }

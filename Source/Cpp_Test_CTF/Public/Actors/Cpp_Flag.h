@@ -14,8 +14,7 @@ class UBoxComponent;
 UENUM(BlueprintType)
 enum class EFlagState : uint8 {
 	FS_Idle UMETA(DisplayName = "Idle"),
-	FS_Carried UMETA(DisplayName = "Carried"),
-	FS_Placed UMETA(DisplayName = "Placed")
+	FS_Carried UMETA(DisplayName = "Carried"),	
 };
 
 UCLASS()
