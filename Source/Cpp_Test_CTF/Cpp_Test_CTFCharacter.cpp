@@ -61,6 +61,7 @@ ACpp_Test_CTFCharacter::ACpp_Test_CTFCharacter() {
 void ACpp_Test_CTFCharacter::BeginPlay() {
 	// Call the base class  
 	Super::BeginPlay();
+
 }
 void ACpp_Test_CTFCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) {
 	// Add Input Mapping Context
