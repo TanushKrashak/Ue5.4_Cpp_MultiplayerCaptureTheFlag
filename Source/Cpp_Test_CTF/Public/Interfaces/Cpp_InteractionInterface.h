@@ -21,5 +21,5 @@ class CPP_TEST_CTF_API ICpp_InteractionInterface
 public:
 	// Func for when projectile hits something
 	UFUNCTION(Category = "Interaction")
-	virtual void OnProjectileHit(AActor* OtherActor, UPrimitiveComponent* OtherComponent, const FHitResult& HitResult);
+	virtual void OnProjectileHit(AActor* OtherActor);
 };

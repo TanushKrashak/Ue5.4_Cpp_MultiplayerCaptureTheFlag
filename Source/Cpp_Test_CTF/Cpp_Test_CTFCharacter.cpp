@@ -120,9 +120,13 @@ void ACpp_Test_CTFCharacter::Look(const FInputActionValue& Value) {
 void ACpp_Test_CTFCharacter::ShootProjectile() {
 	// Spawns a projectile class at the player's location (with offset) with the player's rotation
 	if (ProjectileClass) {
+		UE_LOG(LogTemplateCharacter, Log, TEXT("Shooting Projectile"));
 		const FVector SpawnLocation = GetActorLocation() + FVector(0.0f, 0.0f, 50.0f) + (GetActorForwardVector() * 100);
 		const FRotator SpawnRotation = GetActorRotation();
-		GetWorld()->SpawnActor<ACpp_Projectile>(ProjectileClass, SpawnLocation, SpawnRotation);
+		FActorSpawnParameters SpawnParams = FActorSpawnParameters();
+		SpawnParams.Owner = this;
+		// Spawn the projectile with transform and owner as this character
+		GetWorld()->SpawnActor<ACpp_Projectile>(ProjectileClass, SpawnLocation, SpawnRotation, SpawnParams);
 	}
 	
 
