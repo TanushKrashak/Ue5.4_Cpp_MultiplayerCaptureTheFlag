@@ -6,12 +6,11 @@
 #include "GameFramework/GameStateBase.h"
 #include "Cpp_GS_CTF.generated.h"
 
-/**
- * 
- */
+
 UCLASS()
-class CPP_TEST_CTF_API ACpp_GS_CTF : public AGameStateBase
-{
+class CPP_TEST_CTF_API ACpp_GS_CTF : public AGameStateBase {
 	GENERATED_BODY()
 	
+	// Beginplay like thing for Game State
+	virtual void BeginPlay() override;
 };
