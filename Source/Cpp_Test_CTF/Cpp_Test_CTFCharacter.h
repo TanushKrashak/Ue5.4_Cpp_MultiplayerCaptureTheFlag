@@ -103,13 +103,17 @@ public:
 	//================================================================================================================
 	// PROPERTIES & VARIABLES
 	//================================================================================================================
-	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
-	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+	
 
 
 
 	//================================================================================================================
 	// FUNCTIONS
 	//================================================================================================================
+	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
+	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+	UFUNCTION(NetMulticast, Reliable)
+	void SpawnCharacter();
 };
 

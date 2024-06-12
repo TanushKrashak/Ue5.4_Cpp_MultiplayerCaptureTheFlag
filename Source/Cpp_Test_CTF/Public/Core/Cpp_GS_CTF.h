@@ -10,7 +10,12 @@
 UCLASS()
 class CPP_TEST_CTF_API ACpp_GS_CTF : public AGameStateBase {
 	GENERATED_BODY()
-	
-	// Beginplay like thing for Game State
+
+protected:
+	uint8_t MatchTimer = 3;
+
 	virtual void BeginPlay() override;
+
+	void StartMatchTimer();
+	void StartMatch();
 };

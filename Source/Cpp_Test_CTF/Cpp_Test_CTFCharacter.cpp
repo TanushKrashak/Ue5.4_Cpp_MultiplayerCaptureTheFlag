@@ -208,3 +208,14 @@ void ACpp_Test_CTFCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty
 	DOREPLIFETIME(ACpp_Test_CTFCharacter, bIsTeamA);
 	DOREPLIFETIME(ACpp_Test_CTFCharacter, RespawnPoints);	
 }
+
+void ACpp_Test_CTFCharacter::SpawnCharacter_Implementation() {
+	if (HasAuthority()) {
+	// Randomly select a respawn point
+		if (RespawnPoints.Num() > 0) {
+			ACpp_RespawnPoints* RespawnPoint = RespawnPoints[FMath::RandRange(0, RespawnPoints.Num() - 1)];
+			SetActorLocation(RespawnPoint->GetActorLocation());
+			SetActorRotation(RespawnPoint->GetActorRotation());
+		}
+	}
+}
