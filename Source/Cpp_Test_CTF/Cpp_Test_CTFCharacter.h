@@ -81,7 +81,7 @@ protected:
 	void ShootProjectile();
 
 	// Inherited via ICpp_InteractionInterface
-	virtual bool GetTeam() override;
+	virtual bool GetIsTeamA() override;
 	virtual void OnProjectileHit(AActor * OtherActor) override;
 
 	// Respawn the character after death

@@ -155,7 +155,7 @@ void ACpp_Test_CTFCharacter::ShootProjectile() {
 
 }
 
-bool ACpp_Test_CTFCharacter::GetTeam() {
+bool ACpp_Test_CTFCharacter::GetIsTeamA() {
 	return bIsTeamA;
 }
 void ACpp_Test_CTFCharacter::OnProjectileHit(AActor* OtherActor) {
@@ -174,20 +174,18 @@ void ACpp_Test_CTFCharacter::OnProjectileHit(AActor* OtherActor) {
 }
 
 void ACpp_Test_CTFCharacter::RespawnCharacter() {
+	bIsDead = false;
 	// re-enable collision and unhide
 	SetActorHiddenInGame(false);
 	SetActorEnableCollision(true);
 	// Enable character movement
 	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
-	// Get All Player Starts
-	TArray<AActor*> PlayerStarts;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APlayerStart::StaticClass(), PlayerStarts);
-	// Get Length of Player Starts
-	const int32 NumPlayerStarts = PlayerStarts.Num();
-	// Randomly select a player start
-	const int32 RandomIndex = FMath::RandRange(0, NumPlayerStarts - 1);
-	// Set Actor Location to the Player Start
-	SetActorLocation(Cast<APlayerStart>(PlayerStarts[RandomIndex])->GetActorLocation());
+	// Randomly select a respawn point
+	if (RespawnPoints.Num() > 0) {
+		ACpp_RespawnPoints* RespawnPoint = RespawnPoints[FMath::RandRange(0, RespawnPoints.Num() - 1)];
+		SetActorLocation(RespawnPoint->GetActorLocation());
+		SetActorRotation(RespawnPoint->GetActorRotation());
+	}
 
 }
 
