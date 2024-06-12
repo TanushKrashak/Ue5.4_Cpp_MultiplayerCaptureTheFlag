@@ -9,6 +9,7 @@
 // Forward Declarations
 class UStaticMeshComponent;
 class UProjectileMovementComponent;
+class UBoxComponent;
 
 UCLASS()
 class CPP_TEST_CTF_API ACpp_Projectile : public AActor
@@ -30,14 +31,19 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Projectile", meta = (AllowPrivateAccess = "true"))
 	UProjectileMovementComponent* ProjectileMovement;
 
-
-
-
+	// Collision Component
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Projectile", meta = (AllowPrivateAccess = "true"))
+	UBoxComponent* CollisionComponent;
+		
 	//================================================================================================================
 	// FUNCTIONS
 	//================================================================================================================	
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
+
+	// Function to handle the projectile hitting something
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& Hit);
 
 public:
 	//================================================================================================================
