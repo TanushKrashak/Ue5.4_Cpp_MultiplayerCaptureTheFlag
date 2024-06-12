@@ -11,9 +11,11 @@
 // Forward Declarations
 class USpringArmComponent;
 class UCameraComponent;
+class UInputComponent;
 class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
+class ACpp_RespawnPoints;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
@@ -59,13 +61,18 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Projectile", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<class ACpp_Projectile> ProjectileClass;
 
+	// Replicated Variables
+	UPROPERTY(Replicated, BlueprintReadOnly, Category = "Character", meta = (AllowPrivateAccess = "true"))
 	bool bIsDead;
+	UPROPERTY(Replicated, BlueprintReadOnly, Category = "Character", meta = (AllowPrivateAccess = "true"))
 	bool bIsTeamA;
+	TArray<ACpp_RespawnPoints*> RespawnPoints;
+
 	//================================================================================================================
 	// FUNCTIONS
 	//================================================================================================================
 	virtual void BeginPlay();
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
@@ -78,6 +85,9 @@ protected:
 
 	// Respawn the character after death
 	void RespawnCharacter();
+
+	// Required for replication
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 public:
 	//================================================================================================================

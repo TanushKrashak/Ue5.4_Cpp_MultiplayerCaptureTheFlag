@@ -3,6 +3,7 @@
 // Game Includes
 #include "Cpp_Test_CTFCharacter.h"
 #include "Actors/Cpp_Projectile.h"
+#include "Actors/Cpp_RespawnPoints.h"
 
 // Engine Includes
 #include "Engine/LocalPlayer.h"
@@ -18,6 +19,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/PlayerStart.h"
 #include "Kismet/GameplayStatics.h"
+#include "Net/UnrealNetwork.h"
 
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -61,6 +63,22 @@ ACpp_Test_CTFCharacter::ACpp_Test_CTFCharacter() {
 void ACpp_Test_CTFCharacter::BeginPlay() {
 	// Call the base class  
 	Super::BeginPlay();
+
+	// Is Player Controlled Locally
+	if (IsLocallyControlled()) {
+		// Randomly select a team
+		bIsTeamA = FMath::RandBool();
+		// Get All Respawn Points from world
+		TArray<AActor*> FoundPoints;
+		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACpp_RespawnPoints::StaticClass(), FoundPoints);
+		// Iterate through all found points and add to RespawnPoints array only if the team matches
+		for (AActor* Actor : FoundPoints) {
+			ACpp_RespawnPoints* RespawnPoint = Cast<ACpp_RespawnPoints>(Actor);
+			if (RespawnPoint->GetIsTeamA() == bIsTeamA) {
+				RespawnPoints.Add(RespawnPoint);
+			}
+		}
+	}
 
 }
 void ACpp_Test_CTFCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) {
@@ -168,4 +186,11 @@ void ACpp_Test_CTFCharacter::RespawnCharacter() {
 	// Set Actor Location to the Player Start
 	SetActorLocation(Cast<APlayerStart>(PlayerStarts[RandomIndex])->GetActorLocation());
 
+}
+
+void ACpp_Test_CTFCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const {
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ACpp_Test_CTFCharacter, bIsDead);
+	DOREPLIFETIME(ACpp_Test_CTFCharacter, bIsTeamA);
 }

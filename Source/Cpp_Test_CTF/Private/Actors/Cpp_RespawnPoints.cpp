@@ -13,4 +13,7 @@ ACpp_RespawnPoints::ACpp_RespawnPoints() {
 
 }
 
+bool ACpp_RespawnPoints::GetIsTeamA() {
+	return bIsTeamA;
+}
 
