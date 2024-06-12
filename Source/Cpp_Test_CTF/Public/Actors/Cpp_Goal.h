@@ -9,6 +9,7 @@
 // Forward Declarations
 class UStaticMeshComponent;
 class UBoxComponent;
+class UMaterialInstance;
 
 UCLASS()
 class CPP_TEST_CTF_API ACpp_Goal : public AActor {
@@ -29,11 +30,29 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Goal", meta = (AllowPrivateAccess = "true"))
 	UBoxComponent* GoalCollision;
 
+	// Team Value
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Goal", meta = (AllowPrivateAccess = "true"))
+	bool bIsTeamA;
+
+	// Material for Team A
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Goal", meta = (AllowPrivateAccess = "true"))
+	UMaterialInstance* TeamAMaterial;
+
+	// Material for Team B
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Goal", meta = (AllowPrivateAccess = "true"))
+	UMaterialInstance* TeamBMaterial;
+
 	//================================================================================================================
 	// FUNCTIONS
 	//================================================================================================================
-	// Called when the game starts or when spawned
+	virtual void OnConstruction(const FTransform& Transform) override;
 	virtual void BeginPlay() override;
+
+	UFUNCTION()
+	void OnGoalOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MC_OnGoalOverlap(AActor* OtherActor);
 
 public:
 	//================================================================================================================
@@ -44,4 +63,6 @@ public:
 	//================================================================================================================
 	// FUNCTIONS
 	//================================================================================================================
+
+
 };

@@ -50,7 +50,7 @@ protected:
 	void OnFlagOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 	UFUNCTION(NetMulticast, Reliable)
-	void Serv_OnFlagOverlap(AActor* OtherActor);
+	void MC_OnFlagOverlap(AActor* OtherActor);
 public:
 	//================================================================================================================
 	// PROPERTIES & VARIABLES

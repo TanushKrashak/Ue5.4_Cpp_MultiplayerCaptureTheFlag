@@ -43,11 +43,11 @@ void ACpp_Flag::BeginPlay() {
 
 void ACpp_Flag::OnFlagOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {	
 	if (HasAuthority()) {
-		Serv_OnFlagOverlap(OtherActor);
+		MC_OnFlagOverlap(OtherActor);
 	}
 }
 
-void ACpp_Flag::Serv_OnFlagOverlap_Implementation(AActor* OtherActor) {	
+void ACpp_Flag::MC_OnFlagOverlap_Implementation(AActor* OtherActor) {	
 	switch (FlagState) {
 		case EFlagState::FS_Idle:
 			// Check if other actor was a player			
