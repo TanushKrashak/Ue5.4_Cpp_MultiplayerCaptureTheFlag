@@ -66,6 +66,7 @@ protected:
 	bool bIsDead;
 	UPROPERTY(Replicated, BlueprintReadOnly, Category = "Character", meta = (AllowPrivateAccess = "true"))
 	bool bIsTeamA;
+	UPROPERTY(Replicated, BlueprintReadOnly, Category = "Character", meta = (AllowPrivateAccess = "true"))
 	TArray<ACpp_RespawnPoints*> RespawnPoints;
 
 	//================================================================================================================

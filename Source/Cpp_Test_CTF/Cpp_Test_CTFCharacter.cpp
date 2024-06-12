@@ -65,7 +65,7 @@ void ACpp_Test_CTFCharacter::BeginPlay() {
 	Super::BeginPlay();
 
 	// Is Player Controlled Locally
-	if (IsLocallyControlled()) {
+	if (HasAuthority()) {
 		// Randomly select a team
 		bIsTeamA = FMath::RandBool();
 		// Get All Respawn Points from world
@@ -195,4 +195,5 @@ void ACpp_Test_CTFCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty
 
 	DOREPLIFETIME(ACpp_Test_CTFCharacter, bIsDead);
 	DOREPLIFETIME(ACpp_Test_CTFCharacter, bIsTeamA);
+	DOREPLIFETIME(ACpp_Test_CTFCharacter, RespawnPoints);	
 }
