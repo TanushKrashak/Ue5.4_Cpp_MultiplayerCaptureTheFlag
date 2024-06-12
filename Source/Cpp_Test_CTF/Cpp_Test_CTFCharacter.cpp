@@ -4,6 +4,7 @@
 #include "Cpp_Test_CTFCharacter.h"
 #include "Actors/Cpp_Projectile.h"
 #include "Actors/Cpp_RespawnPoints.h"
+#include "Widgets/Cpp_WGT_Respawning.h"
 
 // Engine Includes
 #include "Engine/LocalPlayer.h"
@@ -160,25 +161,35 @@ bool ACpp_Test_CTFCharacter::GetIsTeamA() {
 	return bIsTeamA;
 }
 void ACpp_Test_CTFCharacter::OnProjectileHit(AActor* OtherActor) {
-	// Character is dead
-	bIsDead = true;
-	// hide and disable collision 
-	SetActorHiddenInGame(true);
-	SetActorEnableCollision(false);
-	// Disable character movement
-	GetCharacterMovement()->DisableMovement();
-	FTimerHandle TimerHandle;
-	GetWorldTimerManager().SetTimer(TimerHandle, this, &ACpp_Test_CTFCharacter::RespawnCharacter, 2.0f, false);
-
-
-
+	OnDeath();
 }
 
+void ACpp_Test_CTFCharacter::OnDeath_Implementation() {
+	if (HasAuthority()) {
+		// Character is dead
+		bIsDead = true;
+		// hide and disable collision 
+		SetActorHiddenInGame(true);
+		SetActorEnableCollision(false);
+		// Disable character movement
+		GetCharacterMovement()->DisableMovement();
+		FTimerHandle TimerHandle;
+		GetWorldTimerManager().SetTimer(TimerHandle, this, &ACpp_Test_CTFCharacter::RespawnCharacter, 2.0f, false);
+	}
+	// Create Respawning Widget
+	if (RespawnWidgetClass && IsLocallyControlled()) {
+		UCpp_WGT_Respawning* RespawnWidget = CreateWidget<UCpp_WGT_Respawning>(GetWorld(), RespawnWidgetClass);
+		if (RespawnWidget) {
+			RespawnWidget->AddToViewport();
+		}
+	}
+}
 void ACpp_Test_CTFCharacter::RespawnCharacter() {
 	bIsDead = false;
 	// re-enable collision and unhide
 	SetActorHiddenInGame(false);
 	SetActorEnableCollision(true);
+
 	// Enable character movement
 	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
 	// Randomly select a respawn point

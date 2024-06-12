@@ -16,6 +16,7 @@ class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
 class ACpp_RespawnPoints;
+class UCpp_WGT_Respawning;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
@@ -69,6 +70,10 @@ protected:
 	UPROPERTY(Replicated, BlueprintReadOnly, Category = "Character", meta = (AllowPrivateAccess = "true"))
 	TArray<ACpp_RespawnPoints*> RespawnPoints;
 
+	// Respawn Widget
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Widgets", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<UCpp_WGT_Respawning> RespawnWidgetClass;
+
 	//================================================================================================================
 	// FUNCTIONS
 	//================================================================================================================
@@ -86,7 +91,8 @@ protected:
 	virtual bool GetIsTeamA() override;
 	virtual void OnProjectileHit(AActor * OtherActor) override;
 
-	// Respawn the character after death
+	UFUNCTION(NetMulticast, Reliable)
+	void OnDeath();
 	void RespawnCharacter();
 
 	// Required for replication
