@@ -7,6 +7,7 @@
 #include "Interfaces/Cpp_InteractionInterface.h"
 
 
+
 ACpp_Projectile::ACpp_Projectile() {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
@@ -73,4 +74,6 @@ void ACpp_Projectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActo
 	}
 
 }
+
+
 

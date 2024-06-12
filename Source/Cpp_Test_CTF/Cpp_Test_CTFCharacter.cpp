@@ -14,7 +14,10 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
-
+#include "TimerManager.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/PlayerStart.h"
+#include "Kismet/GameplayStatics.h"
 
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -51,12 +54,9 @@ ACpp_Test_CTFCharacter::ACpp_Test_CTFCharacter() {
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
-}	
 
-void ACpp_Test_CTFCharacter::OnProjectileHit(AActor* OtherActor) {
-	// print 
-	UE_LOG(LogTemplateCharacter, Log, TEXT("HIT BY PROJECTILE"));
-}
+	bIsDead = false;
+}	
 
 void ACpp_Test_CTFCharacter::BeginPlay() {
 	// Call the base class  
@@ -124,7 +124,7 @@ void ACpp_Test_CTFCharacter::Look(const FInputActionValue& Value) {
 
 void ACpp_Test_CTFCharacter::ShootProjectile() {
 	// Spawns a projectile class at the player's location (with offset) with the player's rotation
-	if (ProjectileClass) {		
+	if (ProjectileClass && !bIsDead) {		
 		const FVector SpawnLocation = GetActorLocation() + FVector(0.0f, 0.0f, 50.0f) + (GetActorForwardVector() * 100);
 		const FRotator SpawnRotation = GetActorRotation();
 		FActorSpawnParameters SpawnParams = FActorSpawnParameters();
@@ -133,5 +133,38 @@ void ACpp_Test_CTFCharacter::ShootProjectile() {
 		GetWorld()->SpawnActor<ACpp_Projectile>(ProjectileClass, SpawnLocation, SpawnRotation, SpawnParams);
 	}
 	
+
+}
+
+void ACpp_Test_CTFCharacter::OnProjectileHit(AActor* OtherActor) {
+	// Character is dead
+	bIsDead = true;
+	// hide and disable collision 
+	SetActorHiddenInGame(true);
+	SetActorEnableCollision(false);
+	// Disable character movement
+	GetCharacterMovement()->DisableMovement();
+	FTimerHandle TimerHandle;
+	GetWorldTimerManager().SetTimer(TimerHandle, this, &ACpp_Test_CTFCharacter::RespawnCharacter, 2.0f, false);
+
+
+
+}
+
+void ACpp_Test_CTFCharacter::RespawnCharacter() {
+	// re-enable collision and unhide
+	SetActorHiddenInGame(false);
+	SetActorEnableCollision(true);
+	// Enable character movement
+	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
+	// Get All Player Starts
+	TArray<AActor*> PlayerStarts;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APlayerStart::StaticClass(), PlayerStarts);
+	// Get Length of Player Starts
+	const int32 NumPlayerStarts = PlayerStarts.Num();
+	// Randomly select a player start
+	const int32 RandomIndex = FMath::RandRange(0, NumPlayerStarts - 1);
+	// Set Actor Location to the Player Start
+	SetActorLocation(Cast<APlayerStart>(PlayerStarts[RandomIndex])->GetActorLocation());
 
 }

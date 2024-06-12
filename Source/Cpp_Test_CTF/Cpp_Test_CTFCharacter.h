@@ -59,8 +59,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Projectile", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<class ACpp_Projectile> ProjectileClass;
 
-	// Inherited via ICpp_InteractionInterface
-	virtual void OnProjectileHit(AActor* OtherActor) override;
+	bool bIsDead;
 
 	//================================================================================================================
 	// FUNCTIONS
@@ -73,6 +72,12 @@ protected:
 
 	// Shoot a projectile
 	void ShootProjectile();
+
+	// Inherited via ICpp_InteractionInterface
+	virtual void OnProjectileHit(AActor * OtherActor) override;
+
+	// Respawn the character after death
+	void RespawnCharacter();
 
 public:
 	//================================================================================================================

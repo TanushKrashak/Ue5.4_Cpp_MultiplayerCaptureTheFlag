@@ -35,6 +35,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Projectile", meta = (AllowPrivateAccess = "true"))
 	UBoxComponent* CollisionComponent;
 		
+
 	//================================================================================================================
 	// FUNCTIONS
 	//================================================================================================================	
