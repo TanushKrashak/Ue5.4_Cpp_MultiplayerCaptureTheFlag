@@ -17,8 +17,7 @@ struct FInputActionValue;
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
 UCLASS(config=Game)
-class ACpp_Test_CTFCharacter : public ACharacter
-{
+class ACpp_Test_CTFCharacter : public ACharacter {
 	GENERATED_BODY()
 public:
 	ACpp_Test_CTFCharacter();
@@ -51,6 +50,10 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 
+	/** Shoot Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* ShootAction;
+
 	//================================================================================================================
 	// FUNCTIONS
 	//================================================================================================================
@@ -59,6 +62,9 @@ protected:
 
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
+
+	// Shoot a projectile
+	void ShootProjectile();
 
 public:
 	//================================================================================================================

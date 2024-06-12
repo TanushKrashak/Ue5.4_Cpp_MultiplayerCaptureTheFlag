@@ -13,8 +13,7 @@
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
-ACpp_Test_CTFCharacter::ACpp_Test_CTFCharacter()
-{
+ACpp_Test_CTFCharacter::ACpp_Test_CTFCharacter() {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 		
@@ -46,23 +45,16 @@ ACpp_Test_CTFCharacter::ACpp_Test_CTFCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
-
-	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
-	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 }
 
-void ACpp_Test_CTFCharacter::BeginPlay()
-{
+void ACpp_Test_CTFCharacter::BeginPlay() {
 	// Call the base class  
 	Super::BeginPlay();
 }
-void ACpp_Test_CTFCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
+void ACpp_Test_CTFCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) {
 	// Add Input Mapping Context
-	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
-	{
-		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
-		{
+	if (APlayerController* PlayerController = Cast<APlayerController>(GetController())) {
+		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer())) {
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
@@ -79,20 +71,20 @@ void ACpp_Test_CTFCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ACpp_Test_CTFCharacter::Look);
+
+		// Shooting
+		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Triggered, this, &ACpp_Test_CTFCharacter::ShootProjectile);
 	}
-	else
-	{
+	else {
 		UE_LOG(LogTemplateCharacter, Error, TEXT("'%s' Failed to find an Enhanced Input component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
 	}
 }
 
-void ACpp_Test_CTFCharacter::Move(const FInputActionValue& Value)
-{
+void ACpp_Test_CTFCharacter::Move(const FInputActionValue& Value) {
 	// input is a Vector2D
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
-	if (Controller != nullptr)
-	{
+	if (Controller != nullptr) {
 		// find out which way is forward
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
@@ -108,15 +100,17 @@ void ACpp_Test_CTFCharacter::Move(const FInputActionValue& Value)
 		AddMovementInput(RightDirection, MovementVector.X);
 	}
 }
-void ACpp_Test_CTFCharacter::Look(const FInputActionValue& Value)
-{
+void ACpp_Test_CTFCharacter::Look(const FInputActionValue& Value) {
 	// input is a Vector2D
 	FVector2D LookAxisVector = Value.Get<FVector2D>();
 
-	if (Controller != nullptr)
-	{
+	if (Controller != nullptr) {
 		// add yaw and pitch input to controller
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
+}
+
+void ACpp_Test_CTFCharacter::ShootProjectile() {
+
 }
