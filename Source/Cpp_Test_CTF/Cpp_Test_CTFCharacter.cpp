@@ -13,9 +13,6 @@
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
-//////////////////////////////////////////////////////////////////////////
-// ACpp_Test_CTFCharacter
-
 ACpp_Test_CTFCharacter::ACpp_Test_CTFCharacter()
 {
 	// Set size for collision capsule

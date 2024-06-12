@@ -7,6 +7,7 @@
 #include "Logging/LogMacros.h"
 #include "Cpp_Test_CTFCharacter.generated.h"
 
+// Forward Declarations
 class USpringArmComponent;
 class UCameraComponent;
 class UInputMappingContext;
@@ -19,7 +20,6 @@ UCLASS(config=Game)
 class ACpp_Test_CTFCharacter : public ACharacter
 {
 	GENERATED_BODY()
-
 public:
 	ACpp_Test_CTFCharacter();
 
