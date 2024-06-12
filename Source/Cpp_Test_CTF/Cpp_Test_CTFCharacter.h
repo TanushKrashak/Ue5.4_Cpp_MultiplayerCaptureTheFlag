@@ -18,6 +18,8 @@ struct FInputActionValue;
 class ACpp_RespawnPoints;
 class UCpp_WGT_Respawning;
 class ACpp_Flag;
+class ACpp_GS_CTF;
+class UCpp_WGT_HUD;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
@@ -131,5 +133,8 @@ public:
 
 	// Setters
 	void SetFlag(ACpp_Flag* flag);
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MC_CreateHUD(ACpp_GS_CTF* GameState, TSubclassOf<UCpp_WGT_HUD> HUDWidgetClass);
 };
 

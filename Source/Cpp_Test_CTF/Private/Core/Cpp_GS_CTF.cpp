@@ -5,6 +5,8 @@
 #include "../Cpp_Test_CTFCharacter.h"
 #include "GameFramework/PlayerController.h"
 #include "TimerManager.h"
+#include "Widgets/Cpp_WGT_HUD.h"
+#include "Net/UnrealNetwork.h"
 
 
 void ACpp_GS_CTF::BeginPlay() {
@@ -15,7 +17,7 @@ void ACpp_GS_CTF::BeginPlay() {
 }
 
 void ACpp_GS_CTF::StartMatchTimer() {
-	if (MatchTimer > 0) {
+	if (MatchTimer > 0 && HasAuthority()) {
 		FTimerHandle TimerHandle;
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ACpp_GS_CTF::StartMatchTimer, 1.0f, false);
 		MatchTimer--;
@@ -37,9 +39,12 @@ void ACpp_GS_CTF::StartMatch() {
 			ACpp_Test_CTFCharacter* Character = Cast<ACpp_Test_CTFCharacter>(PlayerController->GetCharacter());
 			if (Character) {
 				Character->SpawnCharacter();
+				Character->MC_CreateHUD(this, HUDWidgetClass);							
 			}
 		}
 	}
+	
+
 	// Start the timer for the match
 	HandleMatchTimer();
 }
@@ -49,11 +54,26 @@ void ACpp_GS_CTF::HandleMatchTimer() {
 		FTimerHandle TimerHandle;
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ACpp_GS_CTF::HandleMatchTimer, 1.0f, false);
 		MatchTimer--;
+		BroadcastMatchTimer();
 	}
 	else {
 		// End Match
 		if (HasAuthority())
 			UE_LOG(LogTemp, Warning, TEXT("Match Ended"));
 	}
+}
+
+void ACpp_GS_CTF::BroadcastMatchTimer_Implementation() {
+	FMatchTimerUpdate.Broadcast(MatchTimer);
+}
+
+void ACpp_GS_CTF::OnRep_MatchTimer() {
+	FMatchTimerUpdate.Broadcast(MatchTimer);
+}
+
+void ACpp_GS_CTF::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const {
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	
+	DOREPLIFETIME(ACpp_GS_CTF, MatchTimer);
 }
 

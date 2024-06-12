@@ -6,6 +6,8 @@
 #include "Actors/Cpp_RespawnPoints.h"
 #include "Widgets/Cpp_WGT_Respawning.h"
 #include "Actors/Cpp_Flag.h"
+#include "Core/Cpp_GS_CTF.h"
+#include "Widgets/Cpp_WGT_HUD.h"
 
 // Engine Includes
 #include "Engine/LocalPlayer.h"
@@ -84,8 +86,7 @@ void ACpp_Test_CTFCharacter::BeginPlay() {
 		for (AActor* Actor : FoundPoints) {
 			ACpp_RespawnPoints* RespawnPoint = Cast<ACpp_RespawnPoints>(Actor);
 			if (RespawnPoint->GetIsTeamA() == bIsTeamA) {
-				RespawnPoints.Add(RespawnPoint);
-				UE_LOG(LogTemplateCharacter, Warning, TEXT("Respawn Point Added"));
+				RespawnPoints.Add(RespawnPoint);				
 			}
 		}
 	}
@@ -241,4 +242,16 @@ void ACpp_Test_CTFCharacter::SpawnCharacter_Implementation() {
 void ACpp_Test_CTFCharacter::SetFlag(ACpp_Flag* flag) {
 	bHasFlag = true;
 	Flag = flag;
+}
+
+void ACpp_Test_CTFCharacter::MC_CreateHUD_Implementation(ACpp_GS_CTF* GameState, TSubclassOf<UCpp_WGT_HUD> HUDWidgetClass) {
+	// Create HUD widget
+	if (HUDWidgetClass && IsLocallyControlled()) {
+		UE_LOG(LogTemplateCharacter, Warning, TEXT("Creating HUD Widget"));
+		UCpp_WGT_HUD* HUDWidget = CreateWidget<UCpp_WGT_HUD>(GetWorld(), HUDWidgetClass);
+		HUDWidget->SetGameStateReference(GameState);
+		if (HUDWidget) {
+			HUDWidget->AddToViewport();
+		}
+	}
 }
