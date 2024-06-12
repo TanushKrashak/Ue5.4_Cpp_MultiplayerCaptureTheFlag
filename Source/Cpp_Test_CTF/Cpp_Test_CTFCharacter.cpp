@@ -59,6 +59,12 @@ ACpp_Test_CTFCharacter::ACpp_Test_CTFCharacter() {
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
 	bIsDead = false;
+
+	// Set up Location For FlagAttachment
+	FlagAttachment = CreateDefaultSubobject<USceneComponent>(TEXT("FlagAttachment"));
+	FlagAttachment->SetupAttachment(RootComponent);
+	FlagAttachment->SetRelativeLocation(FVector(0.0f, 0.0f, 100.0f));
+
 }	
 
 void ACpp_Test_CTFCharacter::BeginPlay() {

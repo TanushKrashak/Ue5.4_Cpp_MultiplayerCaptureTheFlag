@@ -18,6 +18,7 @@ struct FInputActionValue;
 class ACpp_RespawnPoints;
 class UCpp_WGT_Respawning;
 
+
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
 UCLASS(config=Game)
@@ -74,6 +75,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Widgets", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<UCpp_WGT_Respawning> RespawnWidgetClass;
 
+
+
 	//================================================================================================================
 	// FUNCTIONS
 	//================================================================================================================
@@ -103,7 +106,9 @@ public:
 	//================================================================================================================
 	// PROPERTIES & VARIABLES
 	//================================================================================================================
-	
+	// Scene Component for Flag Attachment
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character", meta = (AllowPrivateAccess = "true"))
+	USceneComponent* FlagAttachment;
 
 
 

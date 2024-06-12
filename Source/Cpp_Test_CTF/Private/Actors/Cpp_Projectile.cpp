@@ -34,7 +34,7 @@ ACpp_Projectile::ACpp_Projectile() {
 	CollisionComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("Collision Box"));	
 	CollisionComponent->SetupAttachment(RootComponent);
 	// Set Size of CollisionComponent
-	CollisionComponent->SetBoxExtent(FVector(11.f, 11.f, 11.f));
+	CollisionComponent->SetBoxExtent(FVector(21.f, 21.f, 21.f));
 	// Set Collision Response to Ignore for all channels but For Pawn set it to Overlap
 	CollisionComponent->SetCollisionResponseToAllChannels(ECR_Ignore);
 	CollisionComponent->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
