@@ -2,25 +2,15 @@
 
 
 #include "Actors/Cpp_RespawnPoints.h"
+#include "Components/ArrowComponent.h"
 
-ACpp_RespawnPoints::ACpp_RespawnPoints()
-{
+ACpp_RespawnPoints::ACpp_RespawnPoints() {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
+
+	// Create Arrow Component
+	ArrowComponent = CreateDefaultSubobject<UArrowComponent>(TEXT("ArrowComponent"));
 
 }
 
-
-void ACpp_RespawnPoints::BeginPlay()
-{
-	Super::BeginPlay();
-
-	
-}
-void ACpp_RespawnPoints::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-
-}
 
