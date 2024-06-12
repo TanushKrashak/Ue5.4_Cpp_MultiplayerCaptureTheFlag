@@ -12,10 +12,24 @@ class CPP_TEST_CTF_API ACpp_GS_CTF : public AGameStateBase {
 	GENERATED_BODY()
 
 protected:
-	uint8_t MatchTimer = 3;
+	//================================================================================================================
+	// PROPERTIES & VARIABLES
+	//================================================================================================================
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Game", meta = (AllowPrivateAccess = "true"))
+	int MatchTimer = 3; // 3 Seconds after which the match will start
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Game", meta = (AllowPrivateAccess = "true"))
+	int TeamAScore = 0;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Game", meta = (AllowPrivateAccess = "true"))
+	int TeamBScore = 0;
+
+	//================================================================================================================
+	// FUNCTIONS
+	//================================================================================================================
 	virtual void BeginPlay() override;
 
 	void StartMatchTimer();
 	void StartMatch();
+
+	void HandleMatchTimer();
 };

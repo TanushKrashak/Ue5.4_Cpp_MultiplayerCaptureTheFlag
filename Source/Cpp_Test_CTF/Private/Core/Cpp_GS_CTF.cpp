@@ -9,8 +9,7 @@
 
 void ACpp_GS_CTF::BeginPlay() {
 	Super::BeginPlay();
-	
-	// Call Start Match After 5 Seconds
+		
 	StartMatchTimer();
 
 }
@@ -22,7 +21,11 @@ void ACpp_GS_CTF::StartMatchTimer() {
 		MatchTimer--;
 	}
 	else {
-		StartMatch();
+		if (HasAuthority()) {
+			// Time For Match To End
+			MatchTimer = 5;
+			StartMatch();
+		}
 	}
 }
 
@@ -36,6 +39,21 @@ void ACpp_GS_CTF::StartMatch() {
 				Character->SpawnCharacter();
 			}
 		}
+	}
+	// Start the timer for the match
+	HandleMatchTimer();
+}
+
+void ACpp_GS_CTF::HandleMatchTimer() {
+	if (MatchTimer > 0) {
+		FTimerHandle TimerHandle;
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ACpp_GS_CTF::HandleMatchTimer, 1.0f, false);
+		MatchTimer--;
+	}
+	else {
+		// End Match
+		if (HasAuthority())
+			UE_LOG(LogTemp, Warning, TEXT("Match Ended"));
 	}
 }
 
