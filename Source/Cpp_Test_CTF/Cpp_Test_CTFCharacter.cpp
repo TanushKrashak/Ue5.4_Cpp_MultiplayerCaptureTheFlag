@@ -155,6 +155,9 @@ void ACpp_Test_CTFCharacter::ShootProjectile() {
 
 }
 
+bool ACpp_Test_CTFCharacter::GetTeam() {
+	return bIsTeamA;
+}
 void ACpp_Test_CTFCharacter::OnProjectileHit(AActor* OtherActor) {
 	// Character is dead
 	bIsDead = true;

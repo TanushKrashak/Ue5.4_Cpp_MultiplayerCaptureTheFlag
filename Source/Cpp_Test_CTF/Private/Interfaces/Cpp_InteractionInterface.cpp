@@ -8,3 +8,7 @@
 void ICpp_InteractionInterface::OnProjectileHit(AActor* OtherActor) {
 
 }
+
+bool ICpp_InteractionInterface::GetIsTeamA() {
+    return false;
+}

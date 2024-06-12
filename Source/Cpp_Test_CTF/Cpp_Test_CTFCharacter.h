@@ -81,6 +81,7 @@ protected:
 	void ShootProjectile();
 
 	// Inherited via ICpp_InteractionInterface
+	virtual bool GetTeam() override;
 	virtual void OnProjectileHit(AActor * OtherActor) override;
 
 	// Respawn the character after death
@@ -88,6 +89,7 @@ protected:
 
 	// Required for replication
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
 
 public:
 	//================================================================================================================
