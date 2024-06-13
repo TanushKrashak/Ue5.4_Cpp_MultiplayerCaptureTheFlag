@@ -20,6 +20,7 @@ class UCpp_WGT_Respawning;
 class ACpp_Flag;
 class ACpp_GS_CTF;
 class UCpp_WGT_HUD;
+class UCpp_WGT_StartMatchTimer;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
@@ -83,7 +84,11 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Widgets", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<UCpp_WGT_Respawning> RespawnWidgetClass;
 
+	// Start Timer Widget Class
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Widgets", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<UCpp_WGT_StartMatchTimer> StartTimerWidgetClass;
 
+	UCpp_WGT_StartMatchTimer* StartMatchTimerWidget;
 
 	//================================================================================================================
 	// FUNCTIONS
@@ -108,6 +113,9 @@ protected:
 
 	// Required for replication
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MC_RemoveMatchStartWidget();
 
 
 public:
@@ -138,6 +146,7 @@ public:
 
 	UFUNCTION(NetMulticast, Reliable)
 	void MC_CreateHUD(ACpp_GS_CTF* GameState, TSubclassOf<UCpp_WGT_HUD> HUDWidgetClass);
+
 
 	// Inherited via ICpp_InteractionInterface
 	virtual bool GetIsTeamA() override;

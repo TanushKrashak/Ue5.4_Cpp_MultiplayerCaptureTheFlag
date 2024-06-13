@@ -8,6 +8,7 @@
 #include "Actors/Cpp_Flag.h"
 #include "Core/Cpp_GS_CTF.h"
 #include "Widgets/Cpp_WGT_HUD.h"
+#include "Widgets/Cpp_WGT_StartMatchTimer.h"
 
 // Engine Includes
 #include "Engine/LocalPlayer.h"
@@ -75,6 +76,13 @@ void ACpp_Test_CTFCharacter::BeginPlay() {
 	// Call the base class  
 	Super::BeginPlay();
 
+	if (IsLocallyControlled()) {
+		// Create Match Timer Widget
+		StartMatchTimerWidget = CreateWidget<UCpp_WGT_StartMatchTimer>(GetWorld(), StartTimerWidgetClass);
+		if (StartMatchTimerWidget) {			
+			StartMatchTimerWidget->AddToViewport();
+		}
+	}
 
 }
 void ACpp_Test_CTFCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) {
@@ -212,6 +220,14 @@ void ACpp_Test_CTFCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty
 	DOREPLIFETIME(ACpp_Test_CTFCharacter, bHasFlag);
 }
 
+void ACpp_Test_CTFCharacter::MC_RemoveMatchStartWidget_Implementation() {
+	if (IsLocallyControlled()) {
+		if (StartMatchTimerWidget) {
+			StartMatchTimerWidget->RemoveFromParent();
+		}
+	}
+}
+
 void ACpp_Test_CTFCharacter::SpawnCharacter_Implementation() {
 	if (HasAuthority()) {
 	// Randomly select a respawn point
@@ -219,6 +235,9 @@ void ACpp_Test_CTFCharacter::SpawnCharacter_Implementation() {
 			ACpp_RespawnPoints* RespawnPoint = RespawnPoints[FMath::RandRange(0, RespawnPoints.Num() - 1)];
 			SetActorLocation(RespawnPoint->GetActorLocation());
 			SetActorRotation(RespawnPoint->GetActorRotation());
+			// Remove Start Match Timer Widget
+			MC_RemoveMatchStartWidget();
+
 		}
 	}
 }
@@ -250,6 +269,7 @@ void ACpp_Test_CTFCharacter::MC_CreateHUD_Implementation(ACpp_GS_CTF* GameState,
 		}
 	}
 }
+
 
 bool ACpp_Test_CTFCharacter::GetIsTeamA() {
 	return bIsTeamA;

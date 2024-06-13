@@ -18,6 +18,7 @@ void ACpp_GS_CTF::BeginPlay() {
 
 }
 
+
 void ACpp_GS_CTF::StartMatchTimer() {
 	if (MatchTimer > 0 && HasAuthority()) {
 		FTimerHandle TimerHandle;
@@ -88,8 +89,8 @@ void ACpp_GS_CTF::PlayerLoggedIn() {
 			MinPlayers = INT_MAX; // set to max value to prevent the event from firing again
 			StartMatchTimer();
 			// Call Start Match Timer Widget in 0.1 seconds
-			FTimerHandle TimerHandle;
-			GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ACpp_GS_CTF::ShowMatchStartTimer, 0.1f, false);
+			/*FTimerHandle TimerHandle;
+			GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ACpp_GS_CTF::ShowMatchStartTimer, 0.1f, false);*/
 			// Get All Respawn Points from world
 			TArray<AActor*> FoundPoints;
 			UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACpp_RespawnPoints::StaticClass(), FoundPoints);
@@ -117,15 +118,15 @@ void ACpp_GS_CTF::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 	DOREPLIFETIME(ACpp_GS_CTF, RespawnPointsB);
 }
 
-void ACpp_GS_CTF::ShowMatchStartTimer() {
-	for (FConstPlayerControllerIterator It = GetWorld()->GetPlayerControllerIterator(); It; It++) {
-		APlayerController* PlayerController = It->Get();
-		if (PlayerController) {
-			ACpp_Test_CTFCharacter* Character = Cast<ACpp_Test_CTFCharacter>(PlayerController->GetCharacter());
-			if (Character) {				
-				Character->MC_CreateMatchStartTimer(this, HUDWidgetClass);
-			}
-		}
-	}
-}
+//void ACpp_GS_CTF::ShowMatchStartTimer() {
+//	for (FConstPlayerControllerIterator It = GetWorld()->GetPlayerControllerIterator(); It; It++) {
+//		APlayerController* PlayerController = It->Get();
+//		if (PlayerController) {
+//			ACpp_Test_CTFCharacter* Character = Cast<ACpp_Test_CTFCharacter>(PlayerController->GetCharacter());
+//			if (Character) {				
+//				Character->MC_CreateMatchStartTimer(this, HUDWidgetClass);
+//			}
+//		}
+//	}
+//}
 
