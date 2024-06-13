@@ -133,6 +133,8 @@ public:
 	bool GetIsDead();
 	// Setters
 	void SetFlag(ACpp_Flag* flag);
+	void SetTeamA(bool IsTeamA);
+	void SetRespawnPoints(const TArray<ACpp_RespawnPoints*>& InRespawnPoints);
 
 	UFUNCTION(NetMulticast, Reliable)
 	void MC_CreateHUD(ACpp_GS_CTF* GameState, TSubclassOf<UCpp_WGT_HUD> HUDWidgetClass);

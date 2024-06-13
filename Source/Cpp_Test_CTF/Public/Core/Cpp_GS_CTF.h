@@ -8,6 +8,7 @@
 
 // Forward Declarations
 class UCpp_WGT_HUD;
+class ACpp_RespawnPoints;
 
 // Event Dispatcher for Match Timer
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMatchTimerUpdate, int, MatchTimer);
@@ -34,13 +35,19 @@ protected:
 	TSubclassOf<UCpp_WGT_HUD> HUDWidgetClass;
 
 	// Player Count
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Game", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category = "Game", meta = (AllowPrivateAccess = "true"))
 	int PlayerCount = 0;
 
 	/// Minimum Players Required for the match to start (DOES NOT COUNT SERVER)
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Game", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Player", meta = (AllowPrivateAccess = "true"))
 	int MinPlayers = 1;
+	
 
+	// Respawn Points
+	UPROPERTY(Replicated, BlueprintReadOnly, Category = "Player")
+	TArray<ACpp_RespawnPoints*> RespawnPointsA;
+	UPROPERTY(Replicated, BlueprintReadOnly, Category = "Player")
+	TArray<ACpp_RespawnPoints*> RespawnPointsB;
 
 	//================================================================================================================
 	// FUNCTIONS

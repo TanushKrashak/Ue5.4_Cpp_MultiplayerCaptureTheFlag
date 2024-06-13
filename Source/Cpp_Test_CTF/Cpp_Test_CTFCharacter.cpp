@@ -75,21 +75,6 @@ void ACpp_Test_CTFCharacter::BeginPlay() {
 	// Call the base class  
 	Super::BeginPlay();
 
-	// Is Player Controlled Locally
-	if (HasAuthority()) {
-		// Randomly select a team
-		bIsTeamA = FMath::RandBool();
-		// Get All Respawn Points from world
-		TArray<AActor*> FoundPoints;
-		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACpp_RespawnPoints::StaticClass(), FoundPoints);
-		// Iterate through all found points and add to RespawnPoints array only if the team matches
-		for (AActor* Actor : FoundPoints) {
-			ACpp_RespawnPoints* RespawnPoint = Cast<ACpp_RespawnPoints>(Actor);
-			if (RespawnPoint->GetIsTeamA() == bIsTeamA) {
-				RespawnPoints.Add(RespawnPoint);				
-			}
-		}
-	}
 
 }
 void ACpp_Test_CTFCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) {
@@ -245,6 +230,14 @@ bool ACpp_Test_CTFCharacter::GetIsDead() {
 void ACpp_Test_CTFCharacter::SetFlag(ACpp_Flag* flag) {
 	bHasFlag = true;
 	Flag = flag;
+}
+
+void ACpp_Test_CTFCharacter::SetTeamA(bool IsTeamA) {
+	bIsTeamA = IsTeamA;
+}
+
+void ACpp_Test_CTFCharacter::SetRespawnPoints(const TArray<ACpp_RespawnPoints*>& InRespawnPoints) {
+	RespawnPoints = InRespawnPoints;
 }
 
 void ACpp_Test_CTFCharacter::MC_CreateHUD_Implementation(ACpp_GS_CTF* GameState, TSubclassOf<UCpp_WGT_HUD> HUDWidgetClass) {
