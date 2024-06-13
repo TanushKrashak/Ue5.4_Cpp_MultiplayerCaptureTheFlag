@@ -19,7 +19,6 @@ void ACpp_GS_CTF::BeginPlay() {
 
 }
 
-
 void ACpp_GS_CTF::StartMatchTimer() {
 	if (MatchTimer > 0 && HasAuthority()) {
 		FTimerHandle TimerHandle;
@@ -42,8 +41,9 @@ void ACpp_GS_CTF::StartMatch() {
 	for (FConstPlayerControllerIterator It = GetWorld()->GetPlayerControllerIterator(); It; It++) {
 		APlayerController* PlayerController = It->Get();
 		if (PlayerController) {
-			ACpp_Test_CTFCharacter* Character = Cast<ACpp_Test_CTFCharacter>(PlayerController->GetCharacter());
-			if (Character) {				
+			ACpp_Test_CTFCharacter* Character = Cast<ACpp_Test_CTFCharacter>(PlayerController->GetCharacter());			
+			if (Character) {		
+				AllPlayers.Add(Character);
 				Character->SetTeamA(halfPlayers > 0);
 				if (halfPlayers > 0) {
 					Character->SetRespawnPoints(RespawnPointsA);
@@ -81,17 +81,13 @@ void ACpp_GS_CTF::HandleMatchTimer() {
 			else {
 				int teamAKills = 0, teamBKills = 0;
 				// Go Through All Players
-				for (FConstPlayerControllerIterator It = GetWorld()->GetPlayerControllerIterator(); It; It++) {
-					APlayerController* PlayerController = It->Get();
-					if (PlayerController) {
-						ACpp_Test_CTFCharacter* Character = Cast<ACpp_Test_CTFCharacter>(PlayerController->GetCharacter());
-						if (Character) {
-							if (Character->GetIsTeamA()) {
-								teamAKills += Character->GetPlayerKills();
-							}
-							else {
-								teamBKills += Character->GetPlayerKills();
-							}
+				for (ACpp_Test_CTFCharacter* Character : AllPlayers) {
+					if (Character) {
+						if (Character->GetIsTeamA()) {
+							teamAKills += Character->GetPlayerKills();
+						}
+						else {
+							teamBKills += Character->GetPlayerKills();
 						}
 					}
 				}
@@ -106,13 +102,9 @@ void ACpp_GS_CTF::HandleMatchTimer() {
 				}
 			}
 			// Create Game End Widget For All Players
-			for (FConstPlayerControllerIterator It = GetWorld()->GetPlayerControllerIterator(); It; It++) {
-				APlayerController* PlayerController = It->Get();
-				if (PlayerController) {
-					ACpp_Test_CTFCharacter* Character = Cast<ACpp_Test_CTFCharacter>(PlayerController->GetCharacter());
-					if (Character) {
-						Character->MC_CreateGameEndWidget(Result);
-					}
+			for (ACpp_Test_CTFCharacter* Character : AllPlayers) {
+				if (Character) {
+					Character->MC_CreateGameEndWidget(Result);
 				}
 			}
 		}
@@ -130,6 +122,17 @@ void ACpp_GS_CTF::BroadcastGoalScoredB_Implementation() {
 	FGoalScoredB.Broadcast(TeamBScore);
 }
 
+void ACpp_GS_CTF::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const {
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	
+	DOREPLIFETIME(ACpp_GS_CTF, MatchTimer);
+	DOREPLIFETIME(ACpp_GS_CTF, PlayerCount);
+	DOREPLIFETIME(ACpp_GS_CTF, RespawnPointsA);
+	DOREPLIFETIME(ACpp_GS_CTF, RespawnPointsB);
+	DOREPLIFETIME(ACpp_GS_CTF, TeamAScore);
+	DOREPLIFETIME(ACpp_GS_CTF, TeamBScore);
+	DOREPLIFETIME(ACpp_GS_CTF, AllPlayers);
+}
 
 void ACpp_GS_CTF::OnRep_MatchTimer() {
 	FMatchTimerUpdate.Broadcast(MatchTimer);
@@ -140,7 +143,6 @@ void ACpp_GS_CTF::OnRep_GoalScoredA() {
 void ACpp_GS_CTF::OnRep_GoalScoredB() {
 	FGoalScoredB.Broadcast(TeamBScore);	
 }
-
 
 void ACpp_GS_CTF::PlayerLoggedIn() {
 	if (HasAuthority()) {
@@ -182,16 +184,6 @@ void ACpp_GS_CTF::GoalScored(bool IsTeamA) {
 
 }
 
-void ACpp_GS_CTF::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const {
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-	
-	DOREPLIFETIME(ACpp_GS_CTF, MatchTimer);
-	DOREPLIFETIME(ACpp_GS_CTF, PlayerCount);
-	DOREPLIFETIME(ACpp_GS_CTF, RespawnPointsA);
-	DOREPLIFETIME(ACpp_GS_CTF, RespawnPointsB);
-	DOREPLIFETIME(ACpp_GS_CTF, TeamAScore);
-	DOREPLIFETIME(ACpp_GS_CTF, TeamBScore);
-}
 
 //void ACpp_GS_CTF::ShowMatchStartTimer() {
 //	for (FConstPlayerControllerIterator It = GetWorld()->GetPlayerControllerIterator(); It; It++) {

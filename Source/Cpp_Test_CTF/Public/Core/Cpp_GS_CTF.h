@@ -9,6 +9,7 @@
 // Forward Declarations
 class UCpp_WGT_HUD;
 class ACpp_RespawnPoints;
+class ACpp_Test_CTFCharacter;
 
 // Event Dispatcher for Match Timer
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMatchTimerUpdate, int, MatchTimer);
@@ -50,6 +51,9 @@ protected:
 	UPROPERTY(Replicated, BlueprintReadOnly, Category = "Player")
 	TArray<ACpp_RespawnPoints*> RespawnPointsB;
 
+	// All Players
+	UPROPERTY(Replicated, BlueprintReadOnly, Category = "Player")
+	TArray<ACpp_Test_CTFCharacter*> AllPlayers;
 
 	//================================================================================================================
 	// FUNCTIONS
