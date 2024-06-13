@@ -36,9 +36,14 @@ protected:
 
 	//================================================================================================================
 	// FUNCTIONS
-	//================================================================================================================	
+	//================================================================================================================
+	// Updation	
 	UFUNCTION()
-	void UpdateMatchTimer(int newTime);
+	void UpdateMatchTimer(int newTime);	
+	UFUNCTION()
+	void UpdateScoreA(int newScore);
+	UFUNCTION()
+	void UpdateScoreB(int newScore);
 	
 public:
 	void SetGameStateReference(ACpp_GS_CTF* newGameState);

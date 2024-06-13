@@ -11,6 +11,7 @@ class UStaticMeshComponent;
 class UBoxComponent;
 class UMaterialInstance;
 class ACpp_Flag;
+class ACpp_GS_CTF;
 
 UCLASS()
 class CPP_TEST_CTF_API ACpp_Goal : public AActor {
@@ -53,6 +54,9 @@ protected:
 	// Flag Class
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Goal", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<ACpp_Flag> FlagClass;
+
+	// Game State Reference
+	ACpp_GS_CTF* GameStateRef = nullptr;
 
 	//================================================================================================================
 	// FUNCTIONS

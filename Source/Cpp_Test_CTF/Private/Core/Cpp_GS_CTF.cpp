@@ -77,10 +77,24 @@ void ACpp_GS_CTF::HandleMatchTimer() {
 void ACpp_GS_CTF::BroadcastMatchTimer_Implementation() {
 	FMatchTimerUpdate.Broadcast(MatchTimer);
 }
+void ACpp_GS_CTF::BroadcastGoalScoredA_Implementation() {
+	FGoalScoredA.Broadcast(TeamAScore);
+}
+void ACpp_GS_CTF::BroadcastGoalScoredB_Implementation() {
+	FGoalScoredB.Broadcast(TeamBScore);
+}
+
 
 void ACpp_GS_CTF::OnRep_MatchTimer() {
 	FMatchTimerUpdate.Broadcast(MatchTimer);
 }
+void ACpp_GS_CTF::OnRep_GoalScoredA() {
+	FGoalScoredA.Broadcast(TeamAScore);
+}
+void ACpp_GS_CTF::OnRep_GoalScoredB() {
+	FGoalScoredB.Broadcast(TeamBScore);	
+}
+
 
 void ACpp_GS_CTF::PlayerLoggedIn() {
 	if (HasAuthority()) {
@@ -110,6 +124,18 @@ void ACpp_GS_CTF::PlayerLoggedIn() {
 	}
 }
 
+void ACpp_GS_CTF::GoalScored(bool IsTeamA) {
+	if (IsTeamA) {
+		TeamAScore++;
+		BroadcastGoalScoredA();
+	}
+	else {
+		TeamBScore++;
+		BroadcastGoalScoredB();
+	}
+
+}
+
 void ACpp_GS_CTF::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	
@@ -117,6 +143,8 @@ void ACpp_GS_CTF::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 	DOREPLIFETIME(ACpp_GS_CTF, PlayerCount);
 	DOREPLIFETIME(ACpp_GS_CTF, RespawnPointsA);
 	DOREPLIFETIME(ACpp_GS_CTF, RespawnPointsB);
+	DOREPLIFETIME(ACpp_GS_CTF, TeamAScore);
+	DOREPLIFETIME(ACpp_GS_CTF, TeamBScore);
 }
 
 //void ACpp_GS_CTF::ShowMatchStartTimer() {

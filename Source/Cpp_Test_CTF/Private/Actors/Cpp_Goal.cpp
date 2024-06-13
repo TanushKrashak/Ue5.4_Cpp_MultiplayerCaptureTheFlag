@@ -4,6 +4,7 @@
 #include "Actors/Cpp_Goal.h"
 #include "Interfaces/Cpp_InteractionInterface.h"
 #include "Actors/Cpp_Flag.h"
+#include "Core/Cpp_GS_CTF.h"
 
 // Engine Includes
 #include "Components/BoxComponent.h"
@@ -44,6 +45,9 @@ void ACpp_Goal::OnConstruction(const FTransform& Transform) {
 void ACpp_Goal::BeginPlay() {
 	Super::BeginPlay();
 
+	// Get Game State Reference
+	GameStateRef = Cast<ACpp_GS_CTF>(GetWorld()->GetGameState());
+
 	// Add possible spawn locations for flags, this method is less resource intensive than using Actors
 	FlagSpawnLocations.Empty();
 	FlagSpawnLocations.Add(FVector(2940.0f, 3560.0f, 40.0f));
@@ -72,6 +76,11 @@ void ACpp_Goal::MC_OnGoalOverlap_Implementation(AActor* OtherActor) {
 			FActorSpawnParameters SpawnParams;
 			SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 			GetWorld()->SpawnActor<ACpp_Flag>(FlagClass, FlagSpawnLocations[FMath::RandRange(0, FlagSpawnLocationsLength - 1)], FRotator::ZeroRotator, SpawnParams);			
+
+			// Update Game State
+			if (GameStateRef) {
+				GameStateRef->GoalScored(!bIsTeamA);				
+			}
 		}		
 	}
 	

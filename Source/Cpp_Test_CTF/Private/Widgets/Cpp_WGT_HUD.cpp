@@ -12,11 +12,26 @@ void UCpp_WGT_HUD::UpdateMatchTimer(int newTime) {
 	}
 }
 
+void UCpp_WGT_HUD::UpdateScoreA(int newScore) {
+	if (TXT_TeamAScore) {
+		TXT_TeamAScore->SetText(FText::FromString(FString::FromInt(newScore)));
+	}
+}
+
+void UCpp_WGT_HUD::UpdateScoreB(int newScore) {
+	if (TXT_TeamBScore) {
+		TXT_TeamBScore->SetText(FText::FromString(FString::FromInt(newScore)));
+	}
+}
+
 void UCpp_WGT_HUD::SetGameStateReference(ACpp_GS_CTF* newGameState) {
 	GS_CTF = newGameState;
 
 	// Bind to the delegate
 	GS_CTF->FMatchTimerUpdate.AddDynamic(this, &UCpp_WGT_HUD::UpdateMatchTimer);
+	GS_CTF->FGoalScoredA.AddDynamic(this, &UCpp_WGT_HUD::UpdateScoreA);
+	GS_CTF->FGoalScoredB.AddDynamic(this, &UCpp_WGT_HUD::UpdateScoreB);
+
 }
 
 
