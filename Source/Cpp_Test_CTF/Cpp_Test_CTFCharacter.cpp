@@ -249,6 +249,10 @@ bool ACpp_Test_CTFCharacter::GetIsDead() {
 	return bIsDead;
 }
 
+int ACpp_Test_CTFCharacter::GetPlayerKills() {
+	return PlayerKills;
+}
+
 void ACpp_Test_CTFCharacter::SetFlag(ACpp_Flag* flag) {
 	bHasFlag = true;
 	Flag = flag;

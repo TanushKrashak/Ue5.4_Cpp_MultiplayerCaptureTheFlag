@@ -44,8 +44,7 @@ void UCpp_WGT_HUD::SetGameStateReference(ACpp_GS_CTF* newGameState) {
 		APlayerController* PlayerController = It->Get();
 		if (PlayerController) {
 			ACpp_Test_CTFCharacter* Character = Cast<ACpp_Test_CTFCharacter>(PlayerController->GetCharacter());
-			if (Character && Character->IsLocallyControlled()) {	
-				UE_LOG(LogTemp, Warning, TEXT("Binding to Kill Count Update"));
+			if (Character && Character->IsLocallyControlled()) {					
 				Character->FOnPlayerKillUpdate.AddDynamic(this, &UCpp_WGT_HUD::UpdateKillCount);
 			}
 		}

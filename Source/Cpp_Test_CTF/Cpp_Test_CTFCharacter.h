@@ -147,6 +147,8 @@ public:
 
 	// Getters
 	bool GetIsDead();
+	int GetPlayerKills();
+
 	// Setters
 	void SetFlag(ACpp_Flag* flag);
 	void SetTeamA(bool IsTeamA);

@@ -29,7 +29,7 @@ void ACpp_GS_CTF::StartMatchTimer() {
 	else {
 		if (HasAuthority()) {
 			// Time For Match To End
-			MatchTimer = 5;
+			MatchTimer = 10;
 			StartMatch();
 		}
 	}
@@ -69,8 +69,42 @@ void ACpp_GS_CTF::HandleMatchTimer() {
 	}
 	else {
 		// End Match
-		if (HasAuthority())
-			UE_LOG(LogTemp, Warning, TEXT("Match Ended"));
+		if (HasAuthority()) {
+			if (TeamAScore > TeamBScore) {
+				UE_LOG(LogTemp, Warning, TEXT("Team A Wins!"));
+			}
+			else if (TeamAScore < TeamBScore) {
+				UE_LOG(LogTemp, Warning, TEXT("Team B Wins!"));
+			}
+			else {
+				int teamAKills = 0, teamBKills = 0;
+				// Go Through All Players
+				for (FConstPlayerControllerIterator It = GetWorld()->GetPlayerControllerIterator(); It; It++) {
+					APlayerController* PlayerController = It->Get();
+					if (PlayerController) {
+						ACpp_Test_CTFCharacter* Character = Cast<ACpp_Test_CTFCharacter>(PlayerController->GetCharacter());
+						if (Character) {
+							if (Character->GetIsTeamA()) {
+								teamAKills += Character->GetPlayerKills();
+							}
+							else {
+								teamBKills += Character->GetPlayerKills();
+							}
+						}
+					}
+				}
+				if (teamAKills > teamBKills) {
+					UE_LOG(LogTemp, Warning, TEXT("Team A Wins By Kills!"));
+				}
+				else if (teamAKills < teamBKills) {
+					UE_LOG(LogTemp, Warning, TEXT("Team B Wins By Kills!"));
+				}
+				else {
+					UE_LOG(LogTemp, Warning, TEXT("It's a Draw!"))
+				}
+			}
+		}
+			
 	}
 }
 
