@@ -52,13 +52,16 @@ void ACpp_Flag::MC_OnFlagOverlap_Implementation(AActor* OtherActor) {
 		case EFlagState::FS_Idle:
 			// Check if other actor was a player			
 			if (auto* Player = Cast<ACpp_Test_CTFCharacter>(OtherActor)) {
-				FlagState = EFlagState::FS_Carried;				
-				Player->SetFlag(this);
-				// Disable Self Collision and attach to player
-				FlagMesh->SetSimulatePhysics(false);
-				FlagMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-				FlagCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-				this->AttachToComponent(Player->FlagAttachment, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+				if (!Player->GetIsDead() && !Player->GetHasFlag()) {
+					UE_LOG(LogTemp, Warning, TEXT("Player %d has picked up the flag"), Player->GetIsTeamA());
+					FlagState = EFlagState::FS_Carried;
+					Player->SetFlag(this);
+					// Disable Self Collision and attach to player
+					FlagMesh->SetSimulatePhysics(false);
+					FlagMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+					FlagCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+					this->AttachToComponent(Player->FlagAttachment, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+				}
 			}
 			break;
 		case EFlagState::FS_Carried:
@@ -68,3 +71,15 @@ void ACpp_Flag::MC_OnFlagOverlap_Implementation(AActor* OtherActor) {
 	}
 }
 
+
+void ACpp_Flag::MC_SetFlagState_Implementation(EFlagState NewState) {
+	FlagState = NewState;
+	if (FlagState == EFlagState::FS_Idle) {		
+		// Detach from player character
+		FlagMesh->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);		
+		// Reset the flag to its original position
+		FlagMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		FlagCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+		FlagMesh->SetSimulatePhysics(true);
+	}
+}

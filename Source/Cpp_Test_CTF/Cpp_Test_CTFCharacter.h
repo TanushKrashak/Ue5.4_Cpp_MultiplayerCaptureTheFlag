@@ -98,10 +98,8 @@ protected:
 	UFUNCTION(Server, Reliable)
 	void ShootProjectile();
 
-	// Inherited via ICpp_InteractionInterface
-	virtual bool GetIsTeamA() override;
-	virtual void OnProjectileHit(AActor * OtherActor) override;
-	virtual bool GetHasFlag() override;
+	// Inherited via ICpp_InteractionInterface	
+	virtual void OnProjectileHit(AActor * OtherActor) override;	
 	virtual void ScoreGoal() override;
 
 	UFUNCTION(NetMulticast, Reliable)
@@ -131,10 +129,16 @@ public:
 	UFUNCTION(NetMulticast, Reliable)
 	void SpawnCharacter();
 
+	// Getters
+	bool GetIsDead();
 	// Setters
 	void SetFlag(ACpp_Flag* flag);
 
 	UFUNCTION(NetMulticast, Reliable)
 	void MC_CreateHUD(ACpp_GS_CTF* GameState, TSubclassOf<UCpp_WGT_HUD> HUDWidgetClass);
+
+	// Inherited via ICpp_InteractionInterface
+	virtual bool GetIsTeamA() override;
+	virtual bool GetHasFlag() override;
 };
 

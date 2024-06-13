@@ -166,14 +166,8 @@ void ACpp_Test_CTFCharacter::ShootProjectile_Implementation() {
 
 }
 
-bool ACpp_Test_CTFCharacter::GetIsTeamA() {
-	return bIsTeamA;
-}
 void ACpp_Test_CTFCharacter::OnProjectileHit(AActor* OtherActor) {
 	OnDeath();
-}
-bool ACpp_Test_CTFCharacter::GetHasFlag() {
-	return bHasFlag;
 }
 void ACpp_Test_CTFCharacter::ScoreGoal() {
 	bHasFlag = false;	
@@ -186,14 +180,21 @@ void ACpp_Test_CTFCharacter::OnDeath_Implementation() {
 	if (HasAuthority()) {
 		// Character is dead
 		bIsDead = true;
-		// hide and disable collision 
-		SetActorHiddenInGame(true);
-		SetActorEnableCollision(false);
-		// Disable character movement
-		GetCharacterMovement()->DisableMovement();
-		FTimerHandle TimerHandle;
-		GetWorldTimerManager().SetTimer(TimerHandle, this, &ACpp_Test_CTFCharacter::RespawnCharacter, 2.0f, false);
 	}
+	// hide and disable collision 
+	SetActorHiddenInGame(true);
+	SetActorEnableCollision(false);
+	// Disable character movement
+	GetCharacterMovement()->DisableMovement();
+	FTimerHandle TimerHandle;
+	GetWorldTimerManager().SetTimer(TimerHandle, this, &ACpp_Test_CTFCharacter::RespawnCharacter, 2.0f, false);
+	if (bHasFlag && HasAuthority()) {
+		// Drop Flag			
+		Flag->MC_SetFlagState(EFlagState::FS_Idle);		
+		bHasFlag = false;			
+		Flag = nullptr;
+	}
+	
 	// Create Respawning Widget
 	if (RespawnWidgetClass && IsLocallyControlled()) {
 		UCpp_WGT_Respawning* RespawnWidget = CreateWidget<UCpp_WGT_Respawning>(GetWorld(), RespawnWidgetClass);
@@ -204,10 +205,6 @@ void ACpp_Test_CTFCharacter::OnDeath_Implementation() {
 }
 void ACpp_Test_CTFCharacter::RespawnCharacter() {
 	bIsDead = false;
-	// re-enable collision and unhide
-	SetActorHiddenInGame(false);
-	SetActorEnableCollision(true);
-
 	// Enable character movement
 	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
 	// Randomly select a respawn point
@@ -216,7 +213,9 @@ void ACpp_Test_CTFCharacter::RespawnCharacter() {
 		SetActorLocation(RespawnPoint->GetActorLocation());
 		SetActorRotation(RespawnPoint->GetActorRotation());
 	}
-
+		// re-enable collision and unhide
+	SetActorHiddenInGame(false);
+	SetActorEnableCollision(true);
 }
 
 void ACpp_Test_CTFCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const {
@@ -239,6 +238,10 @@ void ACpp_Test_CTFCharacter::SpawnCharacter_Implementation() {
 	}
 }
 
+bool ACpp_Test_CTFCharacter::GetIsDead() {
+	return bIsDead;
+}
+
 void ACpp_Test_CTFCharacter::SetFlag(ACpp_Flag* flag) {
 	bHasFlag = true;
 	Flag = flag;
@@ -254,4 +257,11 @@ void ACpp_Test_CTFCharacter::MC_CreateHUD_Implementation(ACpp_GS_CTF* GameState,
 			HUDWidget->AddToViewport();
 		}
 	}
+}
+
+bool ACpp_Test_CTFCharacter::GetIsTeamA() {
+	return bIsTeamA;
+}
+bool ACpp_Test_CTFCharacter::GetHasFlag() {
+	return bHasFlag;
 }
