@@ -21,7 +21,7 @@ protected:
 	//================================================================================================================
 	// PROPERTIES & VARIABLES
 	//================================================================================================================
-	UPROPERTY(ReplicatedUsing = OnRep_MatchTimer, VisibleAnywhere, BlueprintReadOnly, Category = "Game", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(ReplicatedUsing = OnRep_MatchTimer, EditAnywhere, BlueprintReadOnly, Category = "Game", meta = (AllowPrivateAccess = "true"))
 	int MatchTimer = 3; // 3 Seconds after which the match will start
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Game", meta = (AllowPrivateAccess = "true"))
@@ -33,6 +33,13 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Widgets", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<UCpp_WGT_HUD> HUDWidgetClass;
 
+	// Player Count
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Game", meta = (AllowPrivateAccess = "true"))
+	int PlayerCount = 0;
+
+	/// Minimum Players Required for the match to start (DOES NOT COUNT SERVER)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Game", meta = (AllowPrivateAccess = "true"))
+	int MinPlayers = 1;
 
 
 	//================================================================================================================
@@ -58,5 +65,8 @@ public:
 
 	UFUNCTION()
 	void OnRep_MatchTimer();
+
+	// Player Login
+	void PlayerLoggedIn();
 
 };

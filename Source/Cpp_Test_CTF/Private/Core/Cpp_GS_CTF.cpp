@@ -10,10 +10,7 @@
 
 
 void ACpp_GS_CTF::BeginPlay() {
-	Super::BeginPlay();
-		
-	StartMatchTimer();
-
+	Super::BeginPlay();	
 }
 
 void ACpp_GS_CTF::StartMatchTimer() {
@@ -69,6 +66,17 @@ void ACpp_GS_CTF::BroadcastMatchTimer_Implementation() {
 
 void ACpp_GS_CTF::OnRep_MatchTimer() {
 	FMatchTimerUpdate.Broadcast(MatchTimer);
+}
+
+void ACpp_GS_CTF::PlayerLoggedIn() {
+	if (HasAuthority()) {
+		PlayerCount++;
+		if (PlayerCount >= MinPlayers) {
+			PlayerCount++; // includes server
+			MinPlayers = INT_MAX; // set to max value
+			StartMatchTimer();
+		}
+	}
 }
 
 void ACpp_GS_CTF::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const {
