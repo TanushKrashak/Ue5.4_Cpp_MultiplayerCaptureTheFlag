@@ -24,6 +24,7 @@ void ACpp_GS_CTF::StartMatchTimer() {
 		FTimerHandle TimerHandle;
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ACpp_GS_CTF::StartMatchTimer, 1.0f, false);
 		MatchTimer--;
+		BroadcastMatchTimer();		
 	}
 	else {
 		if (HasAuthority()) {

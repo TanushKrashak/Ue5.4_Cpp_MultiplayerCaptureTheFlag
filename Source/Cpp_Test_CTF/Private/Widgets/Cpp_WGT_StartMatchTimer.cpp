@@ -6,20 +6,19 @@
 #include "Core/Cpp_GS_CTF.h"
 
 
-void UCpp_WGT_StartMatchTimer::UpdateMatchTimer(int newTime) {
-	if (TXT_Timer) {
-		TXT_Timer->SetText(FText::FromString(FString::FromInt(newTime) + "s"));
-	}
-	// Get GameState Reference
-	SetGameStateReference(Cast<ACpp_GS_CTF>(GetWorld()->GetGameState()));
-
-}
-
 void UCpp_WGT_StartMatchTimer::NativeConstruct() {
 	Super::NativeConstruct();
 	// Set base text
 	if (TXT_Timer) {
 		TXT_Timer->SetText(FText::FromString("WAITING FOR PLAYERS!"));
+	}
+	// Get GameState Reference
+	SetGameStateReference(Cast<ACpp_GS_CTF>(GetWorld()->GetGameState()));
+}
+
+void UCpp_WGT_StartMatchTimer::UpdateMatchTimer(int newTime) {
+	if (TXT_Timer) {
+		TXT_Timer->SetText(FText::FromString(FString::FromInt(newTime) + "s"));
 	}
 }
 
