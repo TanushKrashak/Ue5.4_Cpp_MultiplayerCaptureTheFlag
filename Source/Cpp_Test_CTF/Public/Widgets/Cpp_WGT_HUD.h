@@ -36,7 +36,6 @@ protected:
 	ACpp_GS_CTF* GS_CTF;
 
 
-
 	//================================================================================================================
 	// FUNCTIONS
 	//================================================================================================================
@@ -50,6 +49,7 @@ protected:
 	UFUNCTION()
 	void UpdateKillCount(int newKillCount);
 	
+
 public:
 	void SetGameStateReference(ACpp_GS_CTF* newGameState);
 };

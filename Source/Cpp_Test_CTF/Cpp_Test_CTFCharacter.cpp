@@ -147,6 +147,17 @@ void ACpp_Test_CTFCharacter::Look(const FInputActionValue& Value) {
 	}
 }
 
+void ACpp_Test_CTFCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const {
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ACpp_Test_CTFCharacter, bIsDead);
+	DOREPLIFETIME(ACpp_Test_CTFCharacter, bIsTeamA);
+	DOREPLIFETIME(ACpp_Test_CTFCharacter, RespawnPoints);	
+	DOREPLIFETIME(ACpp_Test_CTFCharacter, bHasFlag);
+	DOREPLIFETIME(ACpp_Test_CTFCharacter, Flag);
+	DOREPLIFETIME(ACpp_Test_CTFCharacter, PlayerKills);
+}
+
 void ACpp_Test_CTFCharacter::ShootProjectile_Implementation() {
 	// Spawns a projectile class at the player's location (with offset) with the player's rotation
 	if (ProjectileClass && !bIsDead && HasAuthority()) {		
@@ -162,7 +173,7 @@ void ACpp_Test_CTFCharacter::ShootProjectile_Implementation() {
 }
 
 void ACpp_Test_CTFCharacter::OnProjectileHit(AActor* OtherActor) {
-	OnDeath();
+	MC_OnDeath();
 }
 void ACpp_Test_CTFCharacter::ScoreGoal() {
 	bHasFlag = false;	
@@ -170,8 +181,7 @@ void ACpp_Test_CTFCharacter::ScoreGoal() {
 	Flag->Destroy();
 
 }
-
-void ACpp_Test_CTFCharacter::OnDeath_Implementation() {
+void ACpp_Test_CTFCharacter::MC_OnDeath_Implementation() {
 	if (HasAuthority()) {
 		// Character is dead
 		bIsDead = true;
@@ -213,27 +223,6 @@ void ACpp_Test_CTFCharacter::RespawnCharacter() {
 	SetActorEnableCollision(true);
 }
 
-void ACpp_Test_CTFCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const {
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-	DOREPLIFETIME(ACpp_Test_CTFCharacter, bIsDead);
-	DOREPLIFETIME(ACpp_Test_CTFCharacter, bIsTeamA);
-	DOREPLIFETIME(ACpp_Test_CTFCharacter, RespawnPoints);	
-	DOREPLIFETIME(ACpp_Test_CTFCharacter, bHasFlag);
-	DOREPLIFETIME(ACpp_Test_CTFCharacter, Flag);
-	DOREPLIFETIME(ACpp_Test_CTFCharacter, PlayerKills);
-}
-
-void ACpp_Test_CTFCharacter::MC_CreateGameEndWidget_Implementation(EGameEndResult Result) {
-	if (IsLocallyControlled()) {
-		UCpp_WGT_GameEnd* GameEndWidget = CreateWidget<UCpp_WGT_GameEnd>(GetWorld(), GameEndWidgetClass);
-		if (GameEndWidget) {
-			GameEndWidget->SetGameEndResult(Result);
-			GameEndWidget->AddToViewport();
-		}
-	}
-}
-
 void ACpp_Test_CTFCharacter::MC_RemoveMatchStartWidget_Implementation() {
 	if (IsLocallyControlled()) {
 		if (StartMatchTimerWidget) {
@@ -259,7 +248,6 @@ void ACpp_Test_CTFCharacter::SpawnCharacter_Implementation() {
 bool ACpp_Test_CTFCharacter::GetIsDead() {
 	return bIsDead;
 }
-
 int ACpp_Test_CTFCharacter::GetPlayerKills() {
 	return PlayerKills;
 }
@@ -268,11 +256,9 @@ void ACpp_Test_CTFCharacter::SetFlag(ACpp_Flag* flag) {
 	bHasFlag = true;
 	Flag = flag;
 }
-
 void ACpp_Test_CTFCharacter::SetTeamA(bool IsTeamA) {
 	bIsTeamA = IsTeamA;
 }
-
 void ACpp_Test_CTFCharacter::SetRespawnPoints(const TArray<ACpp_RespawnPoints*>& InRespawnPoints) {
 	RespawnPoints = InRespawnPoints;
 }
@@ -287,11 +273,18 @@ void ACpp_Test_CTFCharacter::MC_CreateHUD_Implementation(ACpp_GS_CTF* GameState,
 		}
 	}
 }
-
-
 void ACpp_Test_CTFCharacter::MC_UpdateKillCount_Implementation() {
 	PlayerKills++;	
 	FOnPlayerKillUpdate.Broadcast(PlayerKills);
+}
+void ACpp_Test_CTFCharacter::MC_CreateGameEndWidget_Implementation(EGameEndResult Result) {
+	if (IsLocallyControlled()) {
+		UCpp_WGT_GameEnd* GameEndWidget = CreateWidget<UCpp_WGT_GameEnd>(GetWorld(), GameEndWidgetClass);
+		if (GameEndWidget) {
+			GameEndWidget->SetGameEndResult(Result);
+			GameEndWidget->AddToViewport();
+		}
+	}
 }
 
 bool ACpp_Test_CTFCharacter::GetIsTeamA() {

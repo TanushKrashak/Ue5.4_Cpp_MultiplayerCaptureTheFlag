@@ -50,6 +50,7 @@ protected:
 
 	UFUNCTION(NetMulticast, Reliable)
 	void MC_OnFlagOverlap(AActor* OtherActor);
+
 public:
 	//================================================================================================================
 	// PROPERTIES & VARIABLES

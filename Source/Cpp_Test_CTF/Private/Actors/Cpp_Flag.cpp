@@ -29,17 +29,13 @@ ACpp_Flag::ACpp_Flag() {
 	FlagCollision->OnComponentBeginOverlap.AddDynamic(this, &ACpp_Flag::OnFlagOverlap);	
 	FlagCollision->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);			
 
-	FlagState = EFlagState::FS_Idle;
-			
+	FlagState = EFlagState::FS_Idle;			
 }
 
 void ACpp_Flag::BeginPlay() {
 	Super::BeginPlay();
-
 	
 }
-
-
 
 void ACpp_Flag::OnFlagOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {	
 	if (HasAuthority()) {

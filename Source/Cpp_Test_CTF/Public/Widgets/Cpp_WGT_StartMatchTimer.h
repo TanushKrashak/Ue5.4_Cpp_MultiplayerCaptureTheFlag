@@ -11,8 +11,7 @@ class UTextBlock;
 class ACpp_GS_CTF;
 
 UCLASS()
-class CPP_TEST_CTF_API UCpp_WGT_StartMatchTimer : public UUserWidget
-{
+class CPP_TEST_CTF_API UCpp_WGT_StartMatchTimer : public UUserWidget {
 	GENERATED_BODY()
 	
 protected:

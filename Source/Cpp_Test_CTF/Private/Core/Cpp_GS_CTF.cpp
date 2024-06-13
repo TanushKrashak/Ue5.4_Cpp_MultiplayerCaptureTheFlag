@@ -30,7 +30,7 @@ void ACpp_GS_CTF::StartMatchTimer() {
 	else {
 		if (HasAuthority()) {
 			// Time For Match To End
-			MatchTimer = 2;
+			MatchTimer = 60;
 			StartMatch();
 		}
 	}

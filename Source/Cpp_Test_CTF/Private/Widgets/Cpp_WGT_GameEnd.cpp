@@ -44,6 +44,5 @@ void UCpp_WGT_GameEnd::SetGameEndResult(EGameEndResult Result) {
 		case EGameEndResult::GER_Draw:
 			TXT_GameEndResult->SetText(FText::FromString("Match Draw!"));
 			break;
-
 	}
 }

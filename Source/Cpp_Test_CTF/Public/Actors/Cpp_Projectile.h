@@ -12,8 +12,7 @@ class UProjectileMovementComponent;
 class UBoxComponent;
 
 UCLASS()
-class CPP_TEST_CTF_API ACpp_Projectile : public AActor
-{
+class CPP_TEST_CTF_API ACpp_Projectile : public AActor {
 	GENERATED_BODY()
 	
 public:	
@@ -40,7 +39,6 @@ protected:
 	// FUNCTIONS
 	//================================================================================================================	
 	virtual void BeginPlay() override;
-	virtual void Tick(float DeltaTime) override;
 
 	// Function to handle the projectile hitting something
 	UFUNCTION()

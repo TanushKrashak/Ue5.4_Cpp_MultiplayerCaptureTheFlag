@@ -44,11 +44,6 @@ void ACpp_Projectile::BeginPlay() {
 	Super::BeginPlay();
 
 }
-void ACpp_Projectile::Tick(float DeltaTime) {
-	Super::Tick(DeltaTime);
-
-
-}
 
 void ACpp_Projectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& Hit) {
 	// only if has authority

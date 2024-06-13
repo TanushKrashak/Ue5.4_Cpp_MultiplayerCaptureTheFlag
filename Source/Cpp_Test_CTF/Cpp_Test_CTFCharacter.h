@@ -110,6 +110,9 @@ protected:
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 
+	// Required for replication
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
 	// Shoot a projectile
 	UFUNCTION(Server, Reliable)
 	void ShootProjectile();
@@ -117,13 +120,11 @@ protected:
 	// Inherited via ICpp_InteractionInterface	
 	virtual void OnProjectileHit(AActor * OtherActor) override;	
 	virtual void ScoreGoal() override;
-
 	UFUNCTION(NetMulticast, Reliable)
-	void OnDeath();
+	void MC_OnDeath();
 	void RespawnCharacter();
 
-	// Required for replication
-	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	
 
 	UFUNCTION(NetMulticast, Reliable)
 	void MC_RemoveMatchStartWidget();
