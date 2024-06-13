@@ -3,6 +3,7 @@
 // Game Includes
 #include "Actors/Cpp_Goal.h"
 #include "Interfaces/Cpp_InteractionInterface.h"
+#include "Actors/Cpp_Flag.h"
 
 // Engine Includes
 #include "Components/BoxComponent.h"
@@ -38,13 +39,19 @@ void ACpp_Goal::OnConstruction(const FTransform& Transform) {
 	}
 	else {
 		GoalMesh->SetMaterial(0, TeamBMaterial);
-
 	}
 }
 void ACpp_Goal::BeginPlay() {
 	Super::BeginPlay();
 
-	
+	// Add possible spawn locations for flags, this method is less resource intensive than using Actors
+	FlagSpawnLocations.Empty();
+	FlagSpawnLocations.Add(FVector(2940.0f, 3560.0f, 40.0f));
+	FlagSpawnLocations.Add(FVector(2940.0f, 2570.0f, 40.0f));
+	FlagSpawnLocations.Add(FVector(2940.0f, 1080.0f, 40.0f));
+	FlagSpawnLocations.Add(FVector(2100.0f, 1080.0f, 40.0f));
+	FlagSpawnLocations.Add(FVector(2100.0f, 4610.0f, 40.0f));
+	FlagSpawnLocationsLength = int(FlagSpawnLocations.Num());
 }
 
 void ACpp_Goal::OnGoalOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
@@ -61,6 +68,10 @@ void ACpp_Goal::MC_OnGoalOverlap_Implementation(AActor* OtherActor) {
 		// if it is, check if it has the flag
 		if (Interactable->GetHasFlag()) {
 			Interactable->ScoreGoal();
+			// Spawn Another Flag using any random location from the array
+			FActorSpawnParameters SpawnParams;
+			SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+			GetWorld()->SpawnActor<ACpp_Flag>(FlagClass, FlagSpawnLocations[FMath::RandRange(0, FlagSpawnLocationsLength - 1)], FRotator::ZeroRotator, SpawnParams);			
 		}		
 	}
 	

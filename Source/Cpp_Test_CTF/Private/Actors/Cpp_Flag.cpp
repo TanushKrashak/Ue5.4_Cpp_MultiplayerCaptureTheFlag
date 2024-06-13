@@ -52,8 +52,7 @@ void ACpp_Flag::MC_OnFlagOverlap_Implementation(AActor* OtherActor) {
 		case EFlagState::FS_Idle:
 			// Check if other actor was a player			
 			if (auto* Player = Cast<ACpp_Test_CTFCharacter>(OtherActor)) {
-				if (!Player->GetIsDead() && !Player->GetHasFlag()) {
-					UE_LOG(LogTemp, Warning, TEXT("Player %d has picked up the flag"), Player->GetIsTeamA());
+				if (!Player->GetIsDead() && !Player->GetHasFlag()) {					
 					FlagState = EFlagState::FS_Carried;
 					Player->SetFlag(this);
 					// Disable Self Collision and attach to player

@@ -249,8 +249,7 @@ void ACpp_Test_CTFCharacter::SetFlag(ACpp_Flag* flag) {
 
 void ACpp_Test_CTFCharacter::MC_CreateHUD_Implementation(ACpp_GS_CTF* GameState, TSubclassOf<UCpp_WGT_HUD> HUDWidgetClass) {
 	// Create HUD widget
-	if (HUDWidgetClass && IsLocallyControlled()) {
-		UE_LOG(LogTemplateCharacter, Warning, TEXT("Creating HUD Widget"));
+	if (HUDWidgetClass && IsLocallyControlled()) {		
 		UCpp_WGT_HUD* HUDWidget = CreateWidget<UCpp_WGT_HUD>(GetWorld(), HUDWidgetClass);
 		HUDWidget->SetGameStateReference(GameState);
 		if (HUDWidget) {

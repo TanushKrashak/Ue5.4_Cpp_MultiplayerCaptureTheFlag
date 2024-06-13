@@ -10,6 +10,7 @@
 class UStaticMeshComponent;
 class UBoxComponent;
 class UMaterialInstance;
+class ACpp_Flag;
 
 UCLASS()
 class CPP_TEST_CTF_API ACpp_Goal : public AActor {
@@ -41,6 +42,17 @@ protected:
 	// Material for Team B
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Goal", meta = (AllowPrivateAccess = "true"))
 	UMaterialInstance* TeamBMaterial;
+
+	// Possible Spawn Locations For Flags
+	UPROPERTY(BlueprintReadOnly, Category = "Goal", meta = (AllowPrivateAccess = "true"))
+	TArray<FVector> FlagSpawnLocations;
+
+	// Length of Flag Spawn Locations
+	uint8_t FlagSpawnLocationsLength;
+
+	// Flag Class
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Goal", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<ACpp_Flag> FlagClass;
 
 	//================================================================================================================
 	// FUNCTIONS
