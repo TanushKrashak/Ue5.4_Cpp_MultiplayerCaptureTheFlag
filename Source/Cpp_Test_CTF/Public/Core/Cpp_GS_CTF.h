@@ -34,6 +34,10 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Widgets", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<UCpp_WGT_HUD> HUDWidgetClass;
 
+	// Start Timer Widget Class
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Widgets", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<UCpp_WGT_HUD> StartTimerWidgetClass;
+
 	// Player Count
 	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category = "Game", meta = (AllowPrivateAccess = "true"))
 	int PlayerCount = 0;
@@ -64,6 +68,8 @@ protected:
 
 	// Required For Replication
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	void ShowMatchStartTimer();
 
 public:
 	// Delegate for Match Timer
