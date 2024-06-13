@@ -29,6 +29,7 @@ ACpp_Goal::ACpp_Goal() {
 	GoalCollision->SetupAttachment(GoalMesh);
 	GoalCollision->SetRelativeLocation(FVector(0.0f, 0.0f, 0.0f));
 	GoalCollision->SetBoxExtent(FVector(250.0f, 150.0f, 150.0f));
+
 }
 
 

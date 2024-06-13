@@ -19,14 +19,17 @@ protected:
 	//================================================================================================================
 	// PROPERTIES & VARIABLES
 	//================================================================================================================
-	// Timer and Score
+	// Timer 
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	UTextBlock* TXT_Timer;
-
+	// Scores
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	UTextBlock* TXT_TeamAScore;
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	UTextBlock* TXT_TeamBScore;
+	// Kill Count 
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	UTextBlock* TXT_KillCount;
 
 	// GameState Reference
 	UPROPERTY()
@@ -44,6 +47,8 @@ protected:
 	void UpdateScoreA(int newScore);
 	UFUNCTION()
 	void UpdateScoreB(int newScore);
+	UFUNCTION()
+	void UpdateKillCount(int newKillCount);
 	
 public:
 	void SetGameStateReference(ACpp_GS_CTF* newGameState);

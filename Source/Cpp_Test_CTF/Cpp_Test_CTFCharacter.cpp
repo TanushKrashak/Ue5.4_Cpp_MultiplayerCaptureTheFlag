@@ -64,6 +64,7 @@ ACpp_Test_CTFCharacter::ACpp_Test_CTFCharacter() {
 
 	bIsDead = false;
 	bHasFlag = false;
+	PlayerKills = 0;
 
 	// Set up Location For FlagAttachment
 	FlagAttachment = CreateDefaultSubobject<USceneComponent>(TEXT("FlagAttachment"));
@@ -218,6 +219,8 @@ void ACpp_Test_CTFCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty
 	DOREPLIFETIME(ACpp_Test_CTFCharacter, bIsTeamA);
 	DOREPLIFETIME(ACpp_Test_CTFCharacter, RespawnPoints);	
 	DOREPLIFETIME(ACpp_Test_CTFCharacter, bHasFlag);
+	DOREPLIFETIME(ACpp_Test_CTFCharacter, Flag);
+	DOREPLIFETIME(ACpp_Test_CTFCharacter, PlayerKills);
 }
 
 void ACpp_Test_CTFCharacter::MC_RemoveMatchStartWidget_Implementation() {
@@ -270,6 +273,11 @@ void ACpp_Test_CTFCharacter::MC_CreateHUD_Implementation(ACpp_GS_CTF* GameState,
 	}
 }
 
+
+void ACpp_Test_CTFCharacter::MC_UpdateKillCount_Implementation() {
+	PlayerKills++;	
+	FOnPlayerKillUpdate.Broadcast(PlayerKills);
+}
 
 bool ACpp_Test_CTFCharacter::GetIsTeamA() {
 	return bIsTeamA;

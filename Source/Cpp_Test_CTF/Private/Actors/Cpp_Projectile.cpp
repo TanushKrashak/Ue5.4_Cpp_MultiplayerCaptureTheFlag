@@ -5,6 +5,7 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/BoxComponent.h"
 #include "Interfaces/Cpp_InteractionInterface.h"
+#include "../Cpp_Test_CTFCharacter.h"
 
 
 
@@ -16,30 +17,22 @@ ACpp_Projectile::ACpp_Projectile() {
 	bReplicates = true;
 	SetReplicateMovement(true);
 
-	// Create the UStaticMeshComponent* for ProjectileMesh
+	// Initialize ProjectileMesh Component 
 	ProjectileMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ProjectileMesh"));
 	RootComponent = ProjectileMesh;	
-	// Set collision of mesh to NoCollision
 	ProjectileMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
-	// Create a UProjectileMovementComponent for ProjectileMovement
+	// Initialize ProjectileMovement Component
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovement"));
-
-	// Set projectile initial speed and MaxSpeed
 	ProjectileMovement->InitialSpeed = 3000.f;
 	ProjectileMovement->MaxSpeed = 3000.f;
 
-
-	// Set CollisionComponent Details
+	// Initialize Collision Component
 	CollisionComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("Collision Box"));	
-	CollisionComponent->SetupAttachment(RootComponent);
-	// Set Size of CollisionComponent
-	CollisionComponent->SetBoxExtent(FVector(21.f, 21.f, 21.f));
-	// Set Collision Response to Ignore for all channels but For Pawn set it to Overlap
+	CollisionComponent->SetupAttachment(RootComponent);	
+	CollisionComponent->SetBoxExtent(FVector(21.f, 21.f, 21.f));	
 	CollisionComponent->SetCollisionResponseToAllChannels(ECR_Ignore);
 	CollisionComponent->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
-
-	// If projectile overlaps with another actor, call OnHit
 	CollisionComponent->OnComponentBeginOverlap.AddDynamic(this, &ACpp_Projectile::OnHit);
 
 	// After 5 seconds, destroy the projectile
@@ -67,6 +60,11 @@ void ACpp_Projectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActo
 			if (InteractionInterface) {
 				// Call the OnProjectileHit function from the OtherActor
 				InteractionInterface->OnProjectileHit(GetOwner());
+				// Update kill count
+				ACpp_Test_CTFCharacter* Character = Cast<ACpp_Test_CTFCharacter>(GetOwner());
+				if (Character) {
+					Character->MC_UpdateKillCount();
+				}
 			}
 		}
 		Destroy();

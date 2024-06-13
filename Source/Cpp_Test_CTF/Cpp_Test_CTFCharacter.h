@@ -24,6 +24,9 @@ class UCpp_WGT_StartMatchTimer;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
+// Delegate for OnKillCountUpdate
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnKillCountUpdate, int, PlayerKills);
+
 UCLASS(config=Game)
 class ACpp_Test_CTFCharacter : public ACharacter, public ICpp_InteractionInterface {
 	GENERATED_BODY()
@@ -90,6 +93,9 @@ protected:
 
 	UCpp_WGT_StartMatchTimer* StartMatchTimerWidget;
 
+	UPROPERTY(Replicated, BlueprintReadOnly, Category = "Character", meta = (AllowPrivateAccess = "true"))
+	int PlayerKills;
+
 	//================================================================================================================
 	// FUNCTIONS
 	//================================================================================================================
@@ -126,7 +132,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character", meta = (AllowPrivateAccess = "true"))
 	USceneComponent* FlagAttachment;
 
-
+	// Delegate for OnKillCountUpdate
+	UPROPERTY(BlueprintAssignable, Category = "Game")
+	FOnKillCountUpdate FOnPlayerKillUpdate;
 
 	//================================================================================================================
 	// FUNCTIONS
@@ -147,6 +155,8 @@ public:
 	UFUNCTION(NetMulticast, Reliable)
 	void MC_CreateHUD(ACpp_GS_CTF* GameState, TSubclassOf<UCpp_WGT_HUD> HUDWidgetClass);
 
+	UFUNCTION(NetMulticast, Reliable)
+	void MC_UpdateKillCount();
 
 	// Inherited via ICpp_InteractionInterface
 	virtual bool GetIsTeamA() override;
