@@ -4,6 +4,7 @@
 #include "Core/Cpp_GS_CTF.h"
 #include "Actors/Cpp_RespawnPoints.h"
 #include "../Cpp_Test_CTFCharacter.h"
+#include "Widgets/Cpp_WGT_GameEnd.h"
 
 // Engine Includes
 #include "GameFramework/PlayerController.h"
@@ -29,7 +30,7 @@ void ACpp_GS_CTF::StartMatchTimer() {
 	else {
 		if (HasAuthority()) {
 			// Time For Match To End
-			MatchTimer = 10;
+			MatchTimer = 2;
 			StartMatch();
 		}
 	}
@@ -69,12 +70,13 @@ void ACpp_GS_CTF::HandleMatchTimer() {
 	}
 	else {
 		// End Match
-		if (HasAuthority()) {
+		if (HasAuthority()) {		
+			EGameEndResult Result;
 			if (TeamAScore > TeamBScore) {
-				UE_LOG(LogTemp, Warning, TEXT("Team A Wins!"));
+				Result = EGameEndResult::GER_Win;
 			}
 			else if (TeamAScore < TeamBScore) {
-				UE_LOG(LogTemp, Warning, TEXT("Team B Wins!"));
+				Result = EGameEndResult::GER_Lose;
 			}
 			else {
 				int teamAKills = 0, teamBKills = 0;
@@ -94,13 +96,23 @@ void ACpp_GS_CTF::HandleMatchTimer() {
 					}
 				}
 				if (teamAKills > teamBKills) {
-					UE_LOG(LogTemp, Warning, TEXT("Team A Wins By Kills!"));
+					Result = EGameEndResult::GER_WinByKill;
 				}
 				else if (teamAKills < teamBKills) {
-					UE_LOG(LogTemp, Warning, TEXT("Team B Wins By Kills!"));
+					Result = EGameEndResult::GER_LoseByKill;
 				}
 				else {
-					UE_LOG(LogTemp, Warning, TEXT("It's a Draw!"))
+					Result = EGameEndResult::GER_Draw;
+				}
+			}
+			// Create Game End Widget For All Players
+			for (FConstPlayerControllerIterator It = GetWorld()->GetPlayerControllerIterator(); It; It++) {
+				APlayerController* PlayerController = It->Get();
+				if (PlayerController) {
+					ACpp_Test_CTFCharacter* Character = Cast<ACpp_Test_CTFCharacter>(PlayerController->GetCharacter());
+					if (Character) {
+						Character->MC_CreateGameEndWidget(Result);
+					}
 				}
 			}
 		}

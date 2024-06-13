@@ -9,6 +9,7 @@
 #include "Core/Cpp_GS_CTF.h"
 #include "Widgets/Cpp_WGT_HUD.h"
 #include "Widgets/Cpp_WGT_StartMatchTimer.h"
+#include "Widgets/Cpp_WGT_GameEnd.h"
 
 // Engine Includes
 #include "Engine/LocalPlayer.h"
@@ -221,6 +222,16 @@ void ACpp_Test_CTFCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty
 	DOREPLIFETIME(ACpp_Test_CTFCharacter, bHasFlag);
 	DOREPLIFETIME(ACpp_Test_CTFCharacter, Flag);
 	DOREPLIFETIME(ACpp_Test_CTFCharacter, PlayerKills);
+}
+
+void ACpp_Test_CTFCharacter::MC_CreateGameEndWidget_Implementation(EGameEndResult Result) {
+	if (IsLocallyControlled()) {
+		UCpp_WGT_GameEnd* GameEndWidget = CreateWidget<UCpp_WGT_GameEnd>(GetWorld(), GameEndWidgetClass);
+		if (GameEndWidget) {
+			GameEndWidget->SetGameEndResult(Result);
+			GameEndWidget->AddToViewport();
+		}
+	}
 }
 
 void ACpp_Test_CTFCharacter::MC_RemoveMatchStartWidget_Implementation() {

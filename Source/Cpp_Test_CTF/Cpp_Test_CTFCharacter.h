@@ -21,6 +21,7 @@ class ACpp_Flag;
 class ACpp_GS_CTF;
 class UCpp_WGT_HUD;
 class UCpp_WGT_StartMatchTimer;
+class UCpp_WGT_GameEnd;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
@@ -91,6 +92,10 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Widgets", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<UCpp_WGT_StartMatchTimer> StartTimerWidgetClass;
 
+	// Game End Widget Class
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Widgets", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<UCpp_WGT_GameEnd> GameEndWidgetClass;
+
 	UCpp_WGT_StartMatchTimer* StartMatchTimerWidget;
 
 	UPROPERTY(Replicated, BlueprintReadOnly, Category = "Character", meta = (AllowPrivateAccess = "true"))
@@ -160,8 +165,12 @@ public:
 	UFUNCTION(NetMulticast, Reliable)
 	void MC_UpdateKillCount();
 
+	UFUNCTION(NetMulticast, Reliable)
+	void MC_CreateGameEndWidget(EGameEndResult Result);
+
 	// Inherited via ICpp_InteractionInterface
 	virtual bool GetIsTeamA() override;
 	virtual bool GetHasFlag() override;
+
 };
 
